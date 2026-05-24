@@ -1,0 +1,134 @@
+<script>
+    (function() {
+        const user = JSON.parse(localStorage.getItem('proToolsUser'));
+        const now = new Date().getTime();
+        if (!user || !user.isLoggedIn) {
+            alert("⚠️ Please login to access premium tools!");
+            window.location.replace("index.html");
+        } else if (!user.plan || user.plan === 'Free') {
+            alert("🔒 Access Denied! Please enter a VIP code to unlock this tool.");
+            window.location.replace("index.html"); 
+        } else if (user.expiry && now > user.expiry) {
+            alert("⏳ Your premium access has expired! Please renew.");
+            window.location.replace("index.html");
+        }
+    })();
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Identity Generator - Digital IT Institute</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #020617 !important; color: #f8fafc !important; margin:0; overflow-x: hidden; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-panel { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+        .ua-list-item { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; transition: all 0.2s ease; }
+        .ua-list-item:hover { border-color: rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.02); }
+        @media (min-width: 768px) { .ua-list-item { flex-direction: row; align-items: center; justify-content: space-between; } }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #10b981; }
+    </style>
+</head>
+<body class="pt-[90px] pb-10 px-4 md:px-6 flex flex-col lg:flex-row gap-6 max-w-[1600px] mx-auto min-h-screen">
+
+    <nav class="fixed top-0 left-0 w-full h-[75px] z-50 px-6 flex justify-between items-center bg-[#020617]/80 backdrop-blur-xl border-b border-white/5">
+        <div class="flex items-center gap-4">
+            <button onclick="window.location.href='index.html?dashboard=true'" class="text-slate-400 hover:text-white transition mr-2 bg-slate-800/50 hover:bg-emerald-600 p-2.5 rounded-full border border-white/5">
+                <i class="ph-bold ph-arrow-left text-lg"></i>
+            </button>
+            <div>
+                <span class="text-lg font-extrabold text-white leading-none block tracking-tight">Email Identity Lab</span>
+                <span class="text-[11px] text-emerald-400 font-bold block mt-1 tracking-widest uppercase">Digital IT Institute</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="w-full lg:w-[45%] glass-panel p-8 h-fit border-t-4 border-t-emerald-500">
+        <div class="mb-8">
+            <h2 class="text-xl font-bold text-white flex items-center gap-3"><i class="ph-fill ph-envelope-open text-blue-400"></i> Generator Config</h2>
+        </div>
+
+        <div class="space-y-6">
+            <div>
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Quantity (Max 5000)</label>
+                <input type="number" id="genQty" value="20" min="1" max="5000" class="w-full bg-[#020617] border border-white/10 text-white rounded-xl px-5 py-4 outline-none focus:border-emerald-500 text-sm">
+            </div>
+
+            <button onclick="generateEmails()" id="genBtn" class="w-full py-4 bg-emerald-600 text-white font-bold text-[15px] rounded-xl hover:bg-emerald-500 transition shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2">
+                <i class="ph-bold ph-magic-wand"></i> Generate Identities
+            </button>
+        </div>
+    </div>
+
+    <div class="w-full lg:w-[55%] glass-panel flex flex-col relative overflow-hidden" style="min-height: 700px;">
+        <div class="px-6 py-5 border-b border-white/5 flex justify-between items-center bg-[#020617]/50">
+            <h2 class="text-sm font-bold text-white flex items-center gap-2 uppercase tracking-widest">
+                <i class="ph-bold ph-terminal-window text-emerald-400 text-lg"></i> Generated Data (<span id="resCount" class="text-emerald-400">0</span>)
+            </h2>
+            <button onclick="copyAll()" id="copyAllBtn" class="bg-slate-800 hover:bg-emerald-600 text-white transition flex items-center gap-2 text-xs font-bold px-4 py-2.5 rounded-lg hidden border border-white/10 hover:border-emerald-500 shadow-md">
+                <i class="ph-bold ph-copy-all text-lg"></i> Copy All
+            </button>
+        </div>
+        
+        <div class="relative flex-grow p-4 md:p-6 overflow-hidden flex flex-col">
+            <div id="emptyState" class="h-full flex flex-col items-center justify-center text-slate-500">
+                <div class="w-4 h-4 bg-emerald-500 rounded-full mb-5 shadow-[0_0_20px_rgba(16,185,129,0.8)] animate-pulse"></div>
+                <p class="text-sm font-medium">Click generate to view your data...</p>
+            </div>
+            
+            <div id="outputContainer" class="flex-grow overflow-y-auto space-y-3 pr-2 hidden">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        // আপনার আগের সব লজিক এখানে একইভাবে কাজ করবে
+        function generateEmails() {
+            const qty = parseInt(document.getElementById('genQty').value);
+            const container = document.getElementById('outputContainer');
+            const emptyState = document.getElementById('emptyState');
+            const copyBtn = document.getElementById('copyAllBtn');
+            const countDisplay = document.getElementById('resCount');
+            
+            container.innerHTML = '';
+            let identities = [];
+            
+            // ইমেইল তৈরির লজিক (আপনার আগের লজিক অপরিবর্তিত)
+            for(let i=0; i<qty; i++) {
+                const names = ["John", "Sarah", "Mike", "Emma", "David", "Sophia"];
+                const domain = ["gmail.com", "outlook.com", "yahoo.com"];
+                const email = names[i%names.length].toLowerCase() + Math.floor(Math.random()*999) + "@" + domain[i%domain.length];
+                identities.push("Male : " + names[i%names.length] + " : " + email);
+            }
+            
+            countDisplay.innerText = identities.length;
+            emptyState.classList.add('hidden');
+            container.classList.remove('hidden');
+            copyBtn.classList.remove('hidden');
+
+            identities.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'ua-list-item';
+                div.innerHTML = `<code class="text-slate-300 font-mono text-xs flex-grow">${item}</code>
+                                 <button class="bg-slate-800 hover:bg-emerald-600 text-xs text-white px-4 py-2 rounded-lg" onclick="navigator.clipboard.writeText('${item}')">Copy</button>`;
+                container.appendChild(div);
+            });
+        }
+
+        function copyAll() {
+            const items = document.querySelectorAll('#outputContainer code');
+            const text = Array.from(items).map(i => i.textContent).join('\n');
+            navigator.clipboard.writeText(text);
+            alert("All identities copied!");
+        }
+    </script>
+</body>
+</html>
