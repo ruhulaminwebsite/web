@@ -1,319 +1,411 @@
-// ============================================
-// 🏆 DIGITAL IT INSTITUTE - MASTER SCRIPT (V32)
-// ============================================
-
-const CONFIG = {
-    backendURL: "https://script.google.com/macros/s/AKfycbxYhOqNbvO8Y3SHfk-nrvJv9S1CmkCzktB1YKbUbsnoT8nXJ1q7uGfm_c9NttBLPvCDew/exec"
-};
-
-let isLoggedIn = false;
-let countdownInterval;
-
-window.onload = function() {
-    checkLoginStatus();
-};
-
-function setNotice(msg) {
-    const noticeEl = document.getElementById('dynamicNotice');
-    if(noticeEl) noticeEl.innerText = msg;
-}
-
-function checkLoginStatus() {
-    const user = JSON.parse(localStorage.getItem('proToolsUser'));
-    if (user && user.isLoggedIn) {
-        isLoggedIn = true;
-        document.getElementById('home-section').classList.add('hidden');
-        document.getElementById('dashboard-section').classList.remove('hidden');
-        
-        const navBtn = document.getElementById('navAuthBtn');
-        navBtn.innerHTML = `<i class="ph-bold ph-sign-out mr-1.5"></i> Log Out`;
-        navBtn.classList.replace('bg-white', 'bg-red-500');
-        navBtn.classList.replace('text-brandBg', 'text-white');
-        navBtn.onclick = logout;
-
-        document.getElementById('dashUserName').innerText = user.name || "Client";
-        syncUserPlan(user);
-    } else {
-        setNotice("🚀 System Online: Please Login or Register and use your VIP code to unlock the Ultimate CPA Marketers Toolkit & Automation Bots.");
-    }
-}
-
-function syncUserPlan(user) {
-    const data = new URLSearchParams();
-    data.append('action', 'check_status');
-    data.append('email', user.email);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital IT Institute - Advanced CPA Automation Suite</title>
     
-    fetch(CONFIG.backendURL, { method: 'POST', body: data })
-    .then(res => res.json())
-    .then(result => {
-        if (result.result === 'success') {
-            user.plan = result.plan;
-            user.expiry = result.expiry || "";
-            localStorage.setItem('proToolsUser', JSON.stringify(user));
-            updateUIBasedOnPlan(user);
-        } else {
-            logout();
-        }
-    })
-    .catch(err => {
-        updateUIBasedOnPlan(user);
-    });
-}
-
-function updateUIBasedOnPlan(user) {
-    const plan = user.plan;
-    const isPremium = (plan && plan !== 'Free');
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
-    const vipCodeBox = document.getElementById('vipCodeBox');
-    const timerBox = document.getElementById('countdownTimer');
-    
-    if (isPremium) {
-        setNotice("Account Verified. All premium automation tools and bot software are now active.");
-        vipCodeBox.classList.add('hidden');
-        timerBox.classList.remove('hidden');
-        
-        startCountdown(user.expiry);
-        
-        // UNLOCK All UI Icons (Visual Change)
-        const unlockClass = "ph-fill ph-check-circle absolute top-6 right-6 text-emerald-400 text-xl transition z-20";
-        ['ua', 'email', 'validator', 'cpa', 'proxy', 'address', 'mix', 'upcoming', 'dl_clicker'].forEach(id => {
-            const icon = document.getElementById(`lock_${id}`);
-            if(icon) icon.className = unlockClass;
-        });
-
-    } else {
-        setNotice("Access Restricted: Please enter your VIP activation code to enable tools and software.");
-        vipCodeBox.classList.remove('hidden');
-        timerBox.classList.add('hidden');
-        
-        clearInterval(countdownInterval);
-        
-        // LOCK All UI Icons
-        const lockClass = "ph-fill ph-lock-key absolute top-6 right-6 text-slate-600 group-hover:text-red-500 transition text-xl z-20";
-        ['ua', 'email', 'validator', 'cpa', 'proxy', 'address', 'mix', 'upcoming', 'dl_clicker'].forEach(id => {
-            const icon = document.getElementById(`lock_${id}`);
-            if(icon) icon.className = lockClass;
-        });
-    }
-    
-    let savedTab = localStorage.getItem('lastDashTab') || 'tools';
-    switchDashTab(savedTab);
-}
-
-function startCountdown(expiryTimestamp) {
-    clearInterval(countdownInterval);
-    const timerDiv = document.getElementById('countdownTimer');
-    
-    if (!expiryTimestamp) {
-        timerDiv.className = "w-full";
-        timerDiv.innerHTML = `<div class="bg-emerald-500/10 border border-emerald-500/20 px-4 py-3 rounded-2xl text-emerald-400 font-bold text-sm flex items-center justify-center gap-2"><i class="ph-bold ph-infinity text-lg"></i> LIFETIME SYSTEM ACCESS</div>`;
-        return;
-    }
-
-    function update() {
-        const now = new Date().getTime();
-        const distance = expiryTimestamp - now;
-        
-        if (distance < 0) {
-            clearInterval(countdownInterval);
-            timerDiv.innerHTML = '<div class="text-red-500 font-black text-center py-2 bg-red-500/10 rounded-xl border border-red-500/20">ACCESS EXPIRED</div>';
-            const user = JSON.parse(localStorage.getItem('proToolsUser'));
-            if(user.plan !== 'Free') syncUserPlan(user);
-            return;
-        }
-        
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        
-        timerDiv.className = "flex flex-col gap-2";
-        timerDiv.innerHTML = `
-            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">System Validity Remaining</label>
-            <div class="flex items-center gap-3">
-                <div class="bg-brandBg border border-white/10 px-4 py-2 rounded-xl text-center"><span class="text-2xl font-black text-white leading-none">${days}</span><span class="text-[9px] text-slate-500 font-bold block">DAYS</span></div>
-                <div class="text-slate-600 font-bold text-2xl">:</div>
-                <div class="bg-brandBg border border-white/10 px-4 py-2 rounded-xl text-center"><span class="text-2xl font-black text-white leading-none">${hours}</span><span class="text-[9px] text-slate-500 font-bold block">HOURS</span></div>
-            </div>
-        `;
-    }
-    
-    update();
-    countdownInterval = setInterval(update, 60000); 
-}
-
-function switchDashTab(tName) {
-    localStorage.setItem('lastDashTab', tName);
-    
-    document.querySelectorAll('.dash-tab-content').forEach(e => e.classList.add('hidden'));
-    document.querySelectorAll('[id^="tabBtn-"]').forEach(b => { 
-        b.classList.remove('bg-emerald-500/10', 'border-emerald-500', 'text-white', 'shadow-xl'); 
-        b.classList.add('bg-brandSurface', 'text-slate-400', 'border-white/5'); 
-    });
-    
-    const contentBox = document.getElementById('tabContent-' + tName);
-    if(contentBox) contentBox.classList.remove('hidden');
-    
-    const active = document.getElementById('tabBtn-' + tName);
-    if(active) {
-        active.classList.remove('bg-brandSurface', 'text-slate-400', 'border-white/5'); 
-        active.classList.add('bg-emerald-500/10', 'border-emerald-500', 'text-white', 'shadow-xl'); 
-    }
-}
-
-function openAuthModal() { 
-    if(isLoggedIn) {
-        document.getElementById('home-section').classList.add('hidden');
-        document.getElementById('dashboard-section').classList.remove('hidden');
-        window.scrollTo(0,0);
-        return;
-    }
-    document.getElementById('authModal').classList.remove('hidden'); 
-    switchTab('login'); 
-}
-
-function closeAuthModal() { 
-    document.getElementById('authModal').classList.add('hidden'); 
-}
-
-function switchTab(tab) { 
-    const loginForm = document.getElementById('loginForm'); 
-    const registerForm = document.getElementById('registerForm'); 
-    const tabLogin = document.getElementById('tabLogin'); 
-    const tabRegister = document.getElementById('tabRegister'); 
-    
-    loginForm.classList.add('hidden');
-    registerForm.classList.add('hidden');
-    
-    if (tab === 'login') { 
-        loginForm.classList.remove('hidden'); 
-        tabLogin.className = "flex-1 py-5 text-sm font-black text-emerald-400 border-b-2 border-emerald-500 bg-white/5 transition"; 
-        tabRegister.className = "flex-1 py-5 text-sm font-black text-slate-500 hover:text-white transition"; 
-    } else if (tab === 'register') { 
-        registerForm.classList.remove('hidden'); 
-        tabRegister.className = "flex-1 py-5 text-sm font-black text-emerald-400 border-b-2 border-emerald-500 bg-white/5 transition"; 
-        tabLogin.className = "flex-1 py-5 text-sm font-black text-slate-500 hover:text-white transition"; 
-    }
-}
-
-function togglePassword(inputId, icon) { 
-    const input = document.getElementById(inputId); 
-    if (input.type === "password") { 
-        input.type = "text"; icon.classList.replace('ph-eye', 'ph-eye-slash'); 
-    } else { 
-        input.type = "password"; icon.classList.replace('ph-eye-slash', 'ph-eye'); 
-    } 
-}
-
-function logout() { 
-    localStorage.removeItem('proToolsUser'); 
-    location.reload(); 
-}
-
-function handleAuth(event, action) { 
-    event.preventDefault(); 
-    const form = event.target; 
-    const formData = new FormData(form); 
-    const msgDiv = document.getElementById('authMessage'); 
-    const btn = form.querySelector('button[type="submit"]'); 
-    const originalText = btn.innerText; 
-    
-    btn.innerHTML = `Processing...`; 
-    btn.disabled = true; 
-    msgDiv.classList.add('hidden'); 
-    
-    const data = new URLSearchParams(); 
-    data.append('action', action); 
-    for (const pair of formData) data.append(pair[0], pair[1]); 
-    
-    fetch(CONFIG.backendURL, { method: 'POST', body: data })
-    .then(res => res.json())
-    .then(result => { 
-        msgDiv.classList.remove('hidden'); 
-        if (result.result === 'success') { 
-            msgDiv.className = "px-8 pb-8 text-center text-sm font-bold text-emerald-400 bg-emerald-500/5 pt-4"; 
-            msgDiv.innerText = result.message; 
-            
-            if (action === 'login') { 
-                const userData = { isLoggedIn: true, name: result.userData.name, email: result.userData.email, plan: result.userData.plan, expiry: result.userData.expiry }; 
-                localStorage.setItem('proToolsUser', JSON.stringify(userData)); 
-                setTimeout(() => { closeAuthModal(); location.reload(); }, 1000); 
-            } else if (action === 'register') { 
-                form.reset(); 
-                setTimeout(() => { switchTab('login'); msgDiv.innerText = "Identity Created! Please Login."; }, 2000); 
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+                    colors: { 
+                        brandBg: '#020617', 
+                        brandSurface: '#0f172a',
+                        brandAccent: '#10b981',
+                        brandSecondary: '#3b82f6'
+                    }
+                }
             }
-        } else { 
-            msgDiv.className = "px-8 pb-8 text-center text-sm font-bold text-red-400 bg-red-500/5 pt-4"; 
-            msgDiv.innerText = result.message; 
-        } 
-    })
-    .catch(err => { 
-        msgDiv.classList.remove('hidden');
-        msgDiv.className = "px-8 pb-8 text-center text-sm font-bold text-red-400";
-        msgDiv.innerText = "System Connectivity Error. Try again."; 
-    })
-    .finally(() => { 
-        btn.innerText = originalText; 
-        btn.disabled = false; 
-    }); 
-}
-
-function checkAccess(urlOrAction) { 
-    const user = JSON.parse(localStorage.getItem('proToolsUser')); 
-    if (!user || !user.isLoggedIn) { 
-        openAuthModal(); 
-        return; 
-    } 
-    
-    if (!user.plan || user.plan === 'Free') { 
-        // Force scroll to VIP input if trying to access tools without plan
-        document.getElementById('vipCodeBox').scrollIntoView({behavior:'smooth'});
-        alert("🔒 Access Denied: Please enter a VIP code to unlock this feature.");
-    } else { 
-        if (urlOrAction === 'dl_clicker') {
-            window.open("https://drive.google.com/file/d/1xab3lwinRthis9Cn_-1NZMaOvBX7vcOE/view?usp=sharing", '_blank');
-        } else {
-            window.location.href = urlOrAction;
         }
-    } 
-}
-
-function applyVipFromDash() {
-    executeRedeem('dashVipInput');
-}
-
-function executeRedeem(inputId) {
-    const codeInput = document.getElementById(inputId);
-    const code = codeInput.value.trim();
-    const user = JSON.parse(localStorage.getItem('proToolsUser'));
+    </script>
     
-    if (!user || !user.isLoggedIn) { openAuthModal(); return; }
-    if (!code) { alert("⚠️ Please enter a VIP access code!"); return; }
-    
-    const btn = event.target;
-    const originalText = btn.innerText;
-    btn.innerHTML = `Verifying...`;
-    btn.disabled = true;
+    <style>
+        body { background-color: #020617; color: #f8fafc; overflow-x: hidden; scroll-behavior: smooth; }
+        
+        /* Corporate SaaS Animations */
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-12px); } 100% { transform: translateY(0px); } }
+        .animate-float { animation: float 5s ease-in-out infinite; }
+        @keyframes shine { 0% { left: -100%; } 100% { left: 100%; } }
+        .shine-effect { position: relative; overflow: hidden; }
+        .shine-effect::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); transform: skewX(-25deg); animation: shine 3s infinite; }
+        
+        /* Glassmorphism Panels */
+        .glass-panel { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .glass-panel:hover { border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(16, 185, 129, 0.1); transform: translateY(-5px); }
+        
+        /* Auth Modal Close Button Fix */
+        .modal-close-btn { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.3s; z-index: 60; }
+        .modal-close-btn:hover { background: #ef4444; border-color: #ef4444; color: white; transform: rotate(90deg); }
 
-    const data = new URLSearchParams();
-    data.append('action', 'redeem');
-    data.append('email', user.email);
-    data.append('code', code);
-    
-    fetch(CONFIG.backendURL, { method: 'POST', body: data })
-    .then(res => res.json())
-    .then(result => {
-        if (result.result === 'success') {
-            alert(`✅ System Unlocked Successfully!`);
-            user.plan = result.newPlan;
-            user.expiry = result.newExpiry;
-            localStorage.setItem('proToolsUser', JSON.stringify(user));
-            location.reload();
-        } else { 
-            alert("❌ Error: " + result.message); 
-        }
-    })
-    .catch(err => { alert("❌ Verification Server Offline."); })
-    .finally(() => {
-        btn.innerText = originalText;
-        btn.disabled = false;
-    });
-}
+        /* Scroller */
+        .notice-container { width: 100%; overflow: hidden; white-space: nowrap; box-sizing: border-box; }
+        .notice-text { display: inline-block; padding-left: 100%; animation: notice-scroll 30s linear infinite; }
+        @keyframes notice-scroll { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
+
+        .marquee-container-fast { width: 100%; overflow: hidden; white-space: nowrap; position: relative; }
+        .marquee-content-fast { display: inline-flex; animation: marquee-scroll 50s linear infinite; }
+        .marquee-content-fast:hover { animation-play-state: paused; }
+        @keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        .breakout-full-width { width: 100vw !important; position: relative !important; left: 50% !important; right: 50% !important; margin-left: -50vw !important; margin-right: -50vw !important; max-width: 100vw !important; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #10b981; }
+
+        .dash-scroll-area { max-height: 800px; overflow-y: auto; overflow-x: hidden; padding-right: 10px; }
+        
+        /* SaaS Style Gradients */
+        .gradient-text { background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(16,185,129,0.12) 0%, rgba(2,6,23,0) 70%); top: -200px; left: -200px; z-index: 0; pointer-events: none; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <div class="hero-glow"></div>
+    <div class="hero-glow" style="top: auto; bottom: -200px; left: auto; right: -200px; background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, rgba(2,6,23,0) 70%);"></div>
+
+    <nav class="fixed top-0 w-full z-50 bg-[#020617]/80 backdrop-blur-xl border-b border-white/5 px-4 md:px-10 py-4 flex justify-between items-center shadow-2xl">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.reload()">
+            <div class="w-10 h-10 flex items-center justify-center bg-gradient-to-br from-emerald-500 to-blue-600 rounded-xl shadow-lg shadow-emerald-500/20">
+                <i class="ph-bold ph-lightning text-white text-xl animate-pulse"></i>
+            </div>
+            <span class="text-xl md:text-2xl font-extrabold tracking-tight text-white">
+                Digital IT <span class="gradient-text">Institute</span>
+            </span>
+        </div>
+        <div class="flex items-center gap-5">
+            <button id="navAuthBtn" onclick="openAuthModal()" class="px-6 py-2.5 rounded-xl bg-white text-brandBg hover:bg-emerald-50 transition text-sm font-bold shadow-lg shadow-white/5">
+                Get Started
+            </button>
+        </div>
+    </nav>
+
+    <div id="noticeBarContainer" class="fixed top-[73px] left-0 w-full h-[38px] bg-slate-900 border-b border-white/5 text-emerald-400 text-[11px] md:text-sm font-bold flex items-center z-[40] shadow-md transition-all">
+        <div class="notice-container">
+            <div class="notice-text" id="dynamicNotice">🚀 System Online: Please Login or Register and use your VIP code to unlock the Ultimate CPA Marketers Toolkit & Automation Bots.</div>
+        </div>
+    </div>
+
+    <div class="flex-grow pt-[125px] pb-10 w-full relative z-10">
+        
+        <div id="home-section" class="w-full block">
+            
+            <div class="px-4 md:px-6 max-w-7xl mx-auto relative z-10">
+                <header class="pt-12 pb-20 text-center max-w-4xl mx-auto">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] md:text-xs font-bold uppercase tracking-widest mb-8 animate-fade-in shadow-inner">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Enterprise Grade Automation
+                    </div>
+                    <h1 class="text-4xl md:text-7xl font-extrabold mb-8 text-white leading-[1.1] tracking-tight">
+                        The Ultimate Toolkit for <br>
+                        <span class="gradient-text">CPA Marketers</span>
+                    </h1>
+                    <p class="text-sm md:text-xl text-slate-400 mb-12 font-medium leading-relaxed">Generate identities, validate emails, extract proxies, and dominate your campaigns with ultra-premium tools built for performance.</p>
+                    
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <button onclick="openAuthModal()" class="w-full sm:w-auto px-10 py-4 bg-emerald-500 text-white font-bold rounded-2xl hover:bg-emerald-400 transition transform hover:-translate-y-1 shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-2">
+                            <i class="ph-bold ph-key text-xl"></i> Access Dashboard
+                        </button>
+                        <a href="https://t.me/Digital_it_Institute" target="_blank" class="w-full sm:w-auto px-10 py-4 bg-white/5 text-white font-bold rounded-2xl border border-white/10 hover:bg-white/10 transition flex items-center justify-center gap-2">
+                            <i class="ph-bold ph-paper-plane-tilt text-xl"></i> Contact Support
+                        </a>
+                    </div>
+                </header>
+
+                <section class="py-10">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-extrabold text-white">Premium Tools for CPA Marketers</h2>
+                        <div class="w-20 h-1.5 bg-emerald-500 mx-auto mt-4 rounded-full"></div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <div class="glass-panel p-6 group relative cursor-pointer" onclick="openAuthModal()">
+                            <i class="ph-fill ph-lock-key absolute top-5 right-5 text-slate-600 group-hover:text-red-500 transition text-xl"></i>
+                            <div class="w-14 h-14 bg-emerald-500/10 text-emerald-400 rounded-2xl flex items-center justify-center text-3xl mb-4"><i class="ph-fill ph-mask-happy"></i></div>
+                            <h3 class="text-lg font-bold text-white mb-2">Useragent Generator</h3>
+                            <p class="text-xs text-slate-400 font-medium">Generate millions of unique stealth user agents.</p>
+                        </div>
+                        <div class="glass-panel p-6 group relative cursor-pointer" onclick="openAuthModal()">
+                            <i class="ph-fill ph-lock-key absolute top-5 right-5 text-slate-600 group-hover:text-red-500 transition text-xl"></i>
+                            <div class="w-14 h-14 bg-blue-500/10 text-blue-400 rounded-2xl flex items-center justify-center text-3xl mb-4"><i class="ph-fill ph-envelope-simple"></i></div>
+                            <h3 class="text-lg font-bold text-white mb-2">Email Generator</h3>
+                            <p class="text-xs text-slate-400 font-medium">Create realistic email addresses instantly.</p>
+                        </div>
+                        <div class="glass-panel p-6 group relative cursor-pointer" onclick="openAuthModal()">
+                            <i class="ph-fill ph-lock-key absolute top-5 right-5 text-slate-600 group-hover:text-red-500 transition text-xl"></i>
+                            <div class="w-14 h-14 bg-purple-500/10 text-purple-400 rounded-2xl flex items-center justify-center text-3xl mb-4"><i class="ph-fill ph-shield-check"></i></div>
+                            <h3 class="text-lg font-bold text-white mb-2">Email Validator</h3>
+                            <p class="text-xs text-slate-400 font-medium">Verify real-time mail server status.</p>
+                        </div>
+                        <div class="glass-panel p-6 group relative cursor-pointer" onclick="openAuthModal()">
+                            <i class="ph-fill ph-lock-key absolute top-5 right-5 text-slate-600 group-hover:text-red-500 transition text-xl"></i>
+                            <div class="w-14 h-14 bg-orange-500/10 text-orange-400 rounded-2xl flex items-center justify-center text-3xl mb-4"><i class="ph-fill ph-globe"></i></div>
+                            <h3 class="text-lg font-bold text-white mb-2">Best CPA Networks</h3>
+                            <p class="text-xs text-slate-400 font-medium">Curated list of high-paying platforms.</p>
+                        </div>
+                        <div class="glass-panel p-6 group relative cursor-pointer" onclick="openAuthModal()">
+                            <i class="ph-fill ph-lock-key absolute top-5 right-5 text-slate-600 group-hover:text-red-500 transition text-xl"></i>
+                            <div class="w-14 h-14 bg-pink-500/10 text-pink-400 rounded-2xl flex items-center justify-center text-3xl mb-4"><i class="ph-fill ph-tree-structure"></i></div>
+                            <h3 class="text-lg font-bold text-white mb-2">Premium Proxy Lists</h3>
+                            <p class="text-xs text-slate-400 font-medium">Access clean residential & datacenter IPs.</p>
+                        </div>
+                        <div class="glass-panel p-6 group relative cursor-pointer" onclick="openAuthModal()">
+                            <i class="ph-fill ph-lock-key absolute top-5 right-5 text-slate-600 group-hover:text-red-500 transition text-xl"></i>
+                            <div class="w-14 h-14 bg-yellow-500/10 text-yellow-400 rounded-2xl flex items-center justify-center text-3xl mb-4"><i class="ph-fill ph-map-pin"></i></div>
+                            <h3 class="text-lg font-bold text-white mb-2">Address Generator</h3>
+                            <p class="text-xs text-slate-400 font-medium">Accurate residential data for profiles.</p>
+                        </div>
+                        <div class="glass-panel p-6 group relative cursor-pointer" onclick="openAuthModal()">
+                            <i class="ph-fill ph-lock-key absolute top-5 right-5 text-slate-600 group-hover:text-red-500 transition text-xl"></i>
+                            <div class="w-14 h-14 bg-red-500/10 text-red-400 rounded-2xl flex items-center justify-center text-3xl mb-4"><i class="ph-fill ph-robot"></i></div>
+                            <h3 class="text-lg font-bold text-white mb-2">Useragent Random Mix</h3>
+                            <p class="text-xs text-slate-400 font-medium">Complex fingerprint generation.</p>
+                        </div>
+                        <div class="glass-panel p-6 group relative cursor-pointer" onclick="openAuthModal()">
+                            <i class="ph-fill ph-lock-key absolute top-5 right-5 text-slate-600 group-hover:text-red-500 transition text-xl"></i>
+                            <div class="w-14 h-14 bg-cyan-500/10 text-cyan-400 rounded-2xl flex items-center justify-center text-3xl mb-4"><i class="ph-fill ph-rocket"></i></div>
+                            <h3 class="text-lg font-bold text-white mb-2">Upcoming Tools...</h3>
+                            <p class="text-xs text-slate-400 font-medium">Constant updates with lifetime value.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="py-20 mt-10 border-t border-white/5">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-extrabold text-white">Private Bot Software</h2>
+                        <p class="text-slate-400 mt-2">Professional desktop automation for high-speed workflows.</p>
+                    </div>
+                    
+                    <div class="max-w-2xl mx-auto">
+                        <div class="glass-panel p-8 md:p-10 border-t-4 border-t-emerald-500 flex flex-col md:flex-row items-center gap-8 shine-effect group cursor-pointer" onclick="openAuthModal()">
+                            <div class="w-24 h-24 bg-emerald-500/10 rounded-3xl flex items-center justify-center text-6xl text-emerald-400 animate-float"><i class="ph-fill ph-robot"></i></div>
+                            <div class="flex-grow text-center md:text-left">
+                                <h3 class="text-2xl font-bold text-white mb-3">Auto Clicker Bot Pro</h3>
+                                <p class="text-slate-400 text-sm mb-6 leading-relaxed">Advanced mouse & keyboard automation with randomized delay logic to bypass detection. Perfect for CPA signups and repetitive tasks.</p>
+                                <span class="inline-flex items-center gap-2 text-emerald-400 font-bold text-sm bg-emerald-500/10 px-4 py-2 rounded-lg">
+                                    <i class="ph-fill ph-lock-key"></i> Unlocks with VIP Code
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <section id="reviews" class="py-16 md:py-24 relative border-y border-white/5 bg-[#020617] overflow-hidden breakout-full-width">
+                <div class="text-center mb-16 px-4">
+                    <h2 class="text-3xl md:text-5xl font-extrabold mb-4 text-white">Our Marketers Review & Success</h2>
+                    <p class="text-emerald-400 font-bold text-sm md:text-lg">Trusted by thousands of successful professionals globally</p>
+                </div>
+                <div class="marquee-container-fast w-full mt-10">
+                    <div class="marquee-content-fast gap-6 pb-4 px-6 w-max">
+                        <div class="flex gap-6">
+                            <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-emerald-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">A</div><div><h4 class="font-bold text-white">Ariful Islam</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"The Auto Clicker Bot Pro changed my life. Everything is perfectly automated and undetected. Got my first huge payout!"</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
+                            <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-blue-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">M</div><div><h4 class="font-bold text-white">Mehedi Hasan</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"Best tools ever! The Useragent generator provided here is premium quality. Highly recommended for CPA marketing."</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
+                            <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-pink-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">T</div><div><h4 class="font-bold text-white">Tariqul Islam</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star text-slate-600"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"Initially I was skeptical, but after getting access, I got all tools. Earning steadily now using the bulk email gen."</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
+                            <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-purple-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">S</div><div><h4 class="font-bold text-white">Sabbir Hossain</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"The email generator and useragent tools are lifesavers! Saved me hours of manual work and increased conversions."</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
+                            <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-yellow-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">R</div><div><h4 class="font-bold text-white">Rakib Ahmed</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"Everything works flawlessly. The private bot is very stable. Very happy with my access from Digital IT Institute."</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
+                            <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-cyan-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">K</div><div><h4 class="font-bold text-white">Kamrul Hasan</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"Using the Email Validator and Proxy network list. Best tool investment I have made this year!"</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
+                            <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-orange-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">F</div><div><h4 class="font-bold text-white">Fahim Rahman</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"I was struggling with getting approvals, but the Secret Methods from their toolkit got me in."</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
+                        </div>
+                        
+                        <div class="flex gap-6">
+                            <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-emerald-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">A</div><div><h4 class="font-bold text-white">Ariful Islam</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"The Auto Clicker Bot Pro changed my life. Everything is perfectly automated and undetected. Got my first huge payout!"</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
+                            <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-blue-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">M</div><div><h4 class="font-bold text-white">Mehedi Hasan</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"Best tools ever! The Useragent generator provided here is premium quality. Highly recommended for CPA marketing."</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
+                            <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-pink-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">T</div><div><h4 class="font-bold text-white">Tariqul Islam</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star text-slate-600"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"Initially I was skeptical, but after getting access, I got all tools. Earning steadily now using the bulk email gen."</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
+                            <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-purple-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">S</div><div><h4 class="font-bold text-white">Sabbir Hossain</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"The email generator and useragent tools are lifesavers! Saved me hours of manual work and increased conversions."</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
+                            <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-yellow-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">R</div><div><h4 class="font-bold text-white">Rakib Ahmed</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"Everything works flawlessly. The private bot is very stable. Very happy with my access from Digital IT Institute."</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
+                            <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-cyan-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">K</div><div><h4 class="font-bold text-white">Kamrul Hasan</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"Using the Email Validator and Proxy network list. Best tool investment I have made this year!"</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
+                            <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-orange-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">F</div><div><h4 class="font-bold text-white">Fahim Rahman</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"I was struggling with getting approvals, but the Secret Methods from their toolkit got me in."</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-16 bg-gradient-to-r from-[#020617] via-slate-800/50 to-[#020617] border-y border-white/5 py-10 w-full relative overflow-hidden flex flex-col items-center justify-center">
+                    <h3 class="text-xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-blue-400 uppercase tracking-widest mb-8 animate-pulse z-10 flex items-center gap-3">
+                        <i class="ph-fill ph-shield-check text-emerald-400"></i> 100% Verified & Trusted Platform
+                    </h3>
+                    <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 z-10 px-4">
+                        <div class="flex flex-col items-center gap-3"><i class="ph-fill ph-users text-5xl text-blue-400 animate-bounce"></i><span class="text-sm font-bold text-slate-400 uppercase">10,000+ Users</span></div>
+                        <div class="flex flex-col items-center gap-3"><i class="ph-fill ph-star text-5xl text-yellow-400 animate-bounce" style="animation-delay: 0.2s;"></i><span class="text-sm font-bold text-slate-400 uppercase">4.9/5 Ratings</span></div>
+                        <div class="flex flex-col items-center gap-3"><i class="ph-fill ph-headset text-5xl text-purple-400 animate-bounce" style="animation-delay: 0.4s;"></i><span class="text-sm font-bold text-slate-400 uppercase">24/7 Support</span></div>
+                        <div class="flex flex-col items-center gap-3"><i class="ph-fill ph-lock-key text-5xl text-emerald-400 animate-bounce" style="animation-delay: 0.6s;"></i><span class="text-sm font-bold text-slate-400 uppercase">Secure Access</span></div>
+                    </div>
+                </div>
+            </section>
+
+        </div> <div id="dashboard-section" class="hidden px-4 md:px-8 w-full max-w-[1400px] mx-auto animate-fade-in">
+            
+            <div class="w-full glass-panel border border-emerald-500/20 mb-10 p-6 md:p-12 flex flex-col lg:flex-row lg:items-center justify-between gap-8 relative overflow-hidden">
+                <div class="absolute -top-20 -right-20 w-80 h-80 bg-emerald-500/10 blur-[100px] rounded-full pointer-events-none"></div>
+                <div class="z-10">
+                    <h2 class="text-3xl md:text-5xl font-black text-white tracking-tight">Client Workspace</h2>
+                    <div class="flex items-center gap-3 mt-4">
+                        <span class="flex h-3 w-3 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span></span>
+                        <p class="text-slate-300 font-medium text-sm md:text-lg">Logged in as: <span id="dashUserName" class="text-emerald-400 font-bold">Client</span></p>
+                    </div>
+                </div>
+                
+                <div class="bg-brandSurface/80 border border-white/10 rounded-3xl p-6 md:p-8 flex flex-col gap-4 min-w-[320px] md:min-w-[400px] shadow-2xl relative z-10">
+                    <div id="countdownTimer" class="hidden"></div>
+                    
+                    <div id="vipCodeBox" class="block w-full">
+                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 block">Activate System Access</label>
+                        <div class="flex gap-3">
+                            <input type="text" id="dashVipInput" placeholder="ENTER VIP ACCESS CODE" class="w-full bg-brandBg border border-white/10 rounded-xl px-4 py-3 text-white font-mono text-sm outline-none uppercase focus:border-emerald-500 transition-all">
+                            <button onclick="applyVipFromDash()" class="bg-emerald-500 hover:bg-emerald-400 text-white px-6 py-3 rounded-xl font-bold text-sm transition shadow-lg shadow-emerald-500/20 whitespace-nowrap">Unlock</button>
+                        </div>
+                        <p class="text-[10px] text-slate-500 mt-3 flex items-center gap-1"><i class="ph-fill ph-info"></i> Enter a valid code to unlock premium tools.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-10">
+                <div class="w-full lg:w-1/4 flex flex-col gap-3 shrink-0">
+                    <button onclick="switchDashTab('tools')" id="tabBtn-tools" class="text-left px-7 py-5 rounded-2xl font-bold bg-emerald-500/10 border-2 border-emerald-500 text-white shadow-xl shadow-emerald-500/5 transition flex items-center gap-4">
+                        <i class="ph-fill ph-wrench text-2xl"></i> Premium Tools
+                    </button>
+                    <button onclick="switchDashTab('software')" id="tabBtn-software" class="text-left px-7 py-5 rounded-2xl font-bold bg-brandSurface border border-white/5 text-slate-400 hover:bg-white/5 transition flex items-center gap-4">
+                        <i class="ph-fill ph-robot text-2xl"></i> Bot Software
+                    </button>
+                </div>
+
+                <div class="w-full lg:w-3/4 flex-grow dash-scroll-area">
+                    
+                    <div id="tabContent-tools" class="dash-tab-content block">
+                        <div class="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
+                            <h3 class="text-2xl font-bold text-white">Marketers Toolkit</h3>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            <div class="glass-panel p-6 flex flex-col items-start gap-4 cursor-pointer group relative" onclick="checkAccess('useragent-generator.html')">
+                                <i id="lock_ua" class="ph-fill ph-lock-key absolute top-6 right-6 text-slate-600 group-hover:text-red-500 transition text-xl z-20"></i>
+                                <i class="ph-fill ph-mask-happy text-4xl text-emerald-400"></i>
+                                <h4 class="text-base font-bold text-white">UA Generator</h4>
+                            </div>
+                            <div class="glass-panel p-6 flex flex-col items-start gap-4 cursor-pointer group relative" onclick="checkAccess('email-generator.html')">
+                                <i id="lock_email" class="ph-fill ph-lock-key absolute top-6 right-6 text-slate-600 group-hover:text-red-500 transition text-xl z-20"></i>
+                                <i class="ph-fill ph-envelope-open text-4xl text-blue-400"></i>
+                                <h4 class="text-base font-bold text-white">Email Gen</h4>
+                            </div>
+                            <div class="glass-panel p-6 flex flex-col items-start gap-4 cursor-pointer group relative" onclick="checkAccess('email-checker.html')">
+                                <i id="lock_validator" class="ph-fill ph-lock-key absolute top-6 right-6 text-slate-600 group-hover:text-red-500 transition text-xl z-20"></i>
+                                <i class="ph-fill ph-shield-check text-4xl text-purple-400"></i>
+                                <h4 class="text-base font-bold text-white">MX Validator</h4>
+                            </div>
+                            <div class="glass-panel p-6 flex flex-col items-start gap-4 cursor-pointer group relative" onclick="checkAccess('cpa-networks.html')">
+                                <i id="lock_cpa" class="ph-fill ph-lock-key absolute top-6 right-6 text-slate-600 group-hover:text-red-500 transition text-xl z-20"></i>
+                                <i class="ph-fill ph-globe text-4xl text-orange-400"></i>
+                                <h4 class="text-base font-bold text-white">CPA Networks</h4>
+                            </div>
+                            <div class="glass-panel p-6 flex flex-col items-start gap-4 cursor-pointer group relative" onclick="checkAccess('proxy-lists.html')">
+                                <i id="lock_proxy" class="ph-fill ph-lock-key absolute top-6 right-6 text-slate-600 group-hover:text-red-500 transition text-xl z-20"></i>
+                                <i class="ph-fill ph-tree-structure text-4xl text-pink-400"></i>
+                                <h4 class="text-base font-bold text-white">Proxy Lists</h4>
+                            </div>
+                            <div class="glass-panel p-6 flex flex-col items-start gap-4 cursor-pointer group relative" onclick="checkAccess('address-number.html')">
+                                <i id="lock_address" class="ph-fill ph-lock-key absolute top-6 right-6 text-slate-600 group-hover:text-red-500 transition text-xl z-20"></i>
+                                <i class="ph-fill ph-map-pin text-4xl text-yellow-400"></i>
+                                <h4 class="text-base font-bold text-white">Address Gen</h4>
+                            </div>
+                            <div class="glass-panel p-6 flex flex-col items-start gap-4 cursor-pointer group relative" onclick="checkAccess('useragent-random-mix.html')">
+                                <i id="lock_mix" class="ph-fill ph-lock-key absolute top-6 right-6 text-slate-600 group-hover:text-red-500 transition text-xl z-20"></i>
+                                <i class="ph-fill ph-robot text-4xl text-red-400"></i>
+                                <h4 class="text-base font-bold text-white">Random Mix</h4>
+                            </div>
+                            <div class="glass-panel p-6 flex flex-col items-start gap-4 cursor-pointer group relative" onclick="checkAccess('upcoming.html')">
+                                <i id="lock_upcoming" class="ph-fill ph-lock-key absolute top-6 right-6 text-slate-600 group-hover:text-red-500 transition text-xl z-20"></i>
+                                <i class="ph-fill ph-rocket text-4xl text-cyan-400"></i>
+                                <h4 class="text-base font-bold text-white">Upcoming</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tabContent-software" class="dash-tab-content hidden">
+                        <div class="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
+                            <h3 class="text-2xl font-bold text-white">Exclusive Bot Roster</h3>
+                        </div>
+                        <div class="max-w-md">
+                            <div class="glass-panel p-8 shine-effect group relative cursor-pointer" onclick="checkAccess('dl_clicker')">
+                                <i id="lock_dl_clicker" class="ph-fill ph-lock-key absolute top-6 right-6 text-slate-600 group-hover:text-red-500 transition text-xl z-20"></i>
+                                <div class="flex items-center gap-6">
+                                    <div class="w-20 h-20 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-5xl text-emerald-400 shadow-lg group-hover:scale-110 transition-transform"><i class="ph-fill ph-robot"></i></div>
+                                    <div>
+                                        <h4 class="text-xl font-bold text-white">Auto Clicker Pro</h4>
+                                        <p class="text-xs text-slate-500 mt-1">Version 4.2.0 • Stable</p>
+                                    </div>
+                                </div>
+                                <button class="w-full mt-8 py-4 bg-white/5 text-white font-bold rounded-xl border border-white/10 group-hover:bg-emerald-600 group-hover:border-emerald-500 transition flex items-center justify-center gap-2 z-10 relative">
+                                    <i class="ph-bold ph-download-simple text-lg"></i> Download Setup (.zip)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="https://t.me/Digital_it_Institute" target="_blank" class="fixed bottom-8 right-8 w-16 h-16 bg-blue-500 text-white rounded-2xl flex items-center justify-center text-4xl shadow-2xl shadow-blue-500/20 hover:scale-110 hover:-translate-y-2 transition-all z-[9999]">
+        <i class="ph-fill ph-telegram-logo"></i>
+    </a>
+
+    <footer class="bg-brandBg border-t border-white/5 py-8 text-center text-slate-500 text-xs font-bold tracking-[0.2em] mt-auto relative z-50">
+        <p> © 2026 DIGITAL IT INSTITUTE. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <div id="authModal" class="hidden fixed inset-0 z-[99999] flex items-center justify-center bg-slate-900/95 backdrop-blur-md p-4 transition-all">
+        <div class="relative w-full max-w-md bg-brandSurface border border-white/10 rounded-[32px] shadow-2xl overflow-hidden p-1">
+            <div class="modal-close-btn text-slate-400" onclick="closeAuthModal()">
+                <i class="ph-bold ph-x text-lg"></i>
+            </div>
+            
+            <div class="flex border-b border-white/5 bg-brandBg/50 relative pt-2">
+                <button onclick="switchTab('login')" id="tabLogin" class="flex-1 py-5 text-sm font-black text-emerald-400 border-b-2 border-emerald-500 bg-white/5 transition">LOG IN</button>
+                <button onclick="switchTab('register')" id="tabRegister" class="flex-1 py-5 text-sm font-black text-slate-500 hover:text-white transition">REGISTER</button>
+            </div>
+
+            <form id="loginForm" class="p-8 space-y-5" onsubmit="handleAuth(event, 'login')">
+                <div class="text-center mb-6">
+                    <h3 class="text-2xl font-black text-white tracking-tight">Welcome Back</h3>
+                    <p class="text-xs text-slate-500 mt-1 font-medium">Enter your credentials to access tools.</p>
+                </div>
+                <div class="space-y-4">
+                    <input type="email" name="email" placeholder="Email Address" required class="w-full bg-brandBg border border-white/10 rounded-2xl px-5 py-4 text-white outline-none focus:border-emerald-500 transition-all text-sm">
+                    <div class="relative">
+                        <input type="password" id="loginPass" name="password" placeholder="Password" required class="w-full bg-brandBg border border-white/10 rounded-2xl px-5 py-4 text-white outline-none focus:border-emerald-500 transition-all text-sm">
+                        <i class="ph-bold ph-eye absolute top-1/2 -translate-y-1/2 right-5 text-slate-500 cursor-pointer hover:text-white" onclick="togglePassword('loginPass', this)"></i>
+                    </div>
+                </div>
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-blue-600 text-white font-black rounded-2xl shadow-lg shadow-emerald-500/10 transition transform hover:-translate-y-1 mt-4">Login to System</button>
+            </form>
+
+            <form id="registerForm" class="hidden p-8 space-y-4 max-h-[70vh] overflow-y-auto" onsubmit="handleAuth(event, 'register')">
+                <div class="text-center mb-4">
+                    <h3 class="text-2xl font-black text-white tracking-tight">Create Identity</h3>
+                </div>
+                <input type="text" name="name" placeholder="Full Name" required class="w-full bg-brandBg border border-white/10 rounded-2xl px-5 py-4 text-white text-sm outline-none focus:border-emerald-500">
+                <input type="text" name="phone" placeholder="Phone Number" required class="w-full bg-brandBg border border-white/10 rounded-2xl px-5 py-4 text-white text-sm outline-none focus:border-emerald-500">
+                <input type="email" name="email" placeholder="Email Address" required class="w-full bg-brandBg border border-white/10 rounded-2xl px-5 py-4 text-white text-sm outline-none focus:border-emerald-500">
+                <div class="relative">
+                    <input type="password" id="regPass" name="password" placeholder="Set Access Password" required class="w-full bg-brandBg border border-white/10 rounded-2xl px-5 py-4 text-white text-sm outline-none focus:border-emerald-500">
+                    <i class="ph-bold ph-eye absolute top-1/2 -translate-y-1/2 right-5 text-slate-500 cursor-pointer hover:text-white" onclick="togglePassword('regPass', this)"></i>
+                </div>
+                <button type="submit" class="w-full py-4 bg-blue-600 text-white font-black rounded-2xl shadow-lg mt-4 transition transform hover:-translate-y-1">Create Account</button>
+            </form>
+
+            <div id="authMessage" class="px-8 pb-8 text-center text-sm font-bold hidden animate-pulse"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
