@@ -1,5 +1,5 @@
 const CONFIG = {
-    backendURL: "https://script.google.com/macros/s/AKfycbxYhOqNbvO8Y3SHfk-nrvJv9S1CmkCzktB1YKbUbsnoT8nXJ1q7uGfm_c9NttBLPvCDew/exec"
+    backendURL: "https://script.google.com/macros/s/AKfycbw-9MHtncvLNaUACoL0X7qxfQjj7Rf2beXPI_wFqaGbBFMSfSt5K9MPnRSCbyzTLpXEZQ/exec"
 };
 
 let isLoggedIn = false;
@@ -8,11 +8,6 @@ let countdownInterval;
 window.onload = function() {
     checkLoginStatus();
 };
-
-function setNotice(msg) {
-    const noticeEl = document.getElementById('dynamicNotice');
-    if(noticeEl) noticeEl.innerText = msg;
-}
 
 function checkLoginStatus() {
     const user = JSON.parse(localStorage.getItem('proToolsUser'));
@@ -29,8 +24,6 @@ function checkLoginStatus() {
 
         document.getElementById('dashUserName').innerText = user.name || "Client";
         syncUserPlan(user);
-    } else {
-        setNotice("🚀 System Online: Please Login or Register and use your VIP code to unlock the Ultimate CPA Marketers Toolkit & Automation Bots.");
     }
 }
 
@@ -57,34 +50,28 @@ function syncUserPlan(user) {
 }
 
 function updateUIBasedOnPlan(user) {
-    const plan = user.plan;
-    const isPremium = (plan && plan !== 'Free');
+    const isPremium = (user.plan && user.plan !== 'Free');
     
     const vipCodeBox = document.getElementById('vipCodeBox');
     const timerBox = document.getElementById('countdownTimer');
     
     if (isPremium) {
-        setNotice("Account Verified. All premium automation tools and bot software are now active.");
         vipCodeBox.classList.add('hidden');
         timerBox.classList.remove('hidden');
         
         startCountdown(user.expiry);
         
-        // UNLOCK All UI Icons (Visual Change)
         const unlockClass = "ph-fill ph-check-circle absolute top-6 right-6 text-emerald-400 text-xl transition z-20";
         ['ua', 'email', 'validator', 'cpa', 'proxy', 'address', 'mix', 'upcoming', 'dl_clicker'].forEach(id => {
             const icon = document.getElementById(`lock_${id}`);
             if(icon) icon.className = unlockClass;
         });
-
     } else {
-        setNotice("Access Restricted: Please enter your VIP activation code to enable tools and software.");
         vipCodeBox.classList.remove('hidden');
         timerBox.classList.add('hidden');
         
         clearInterval(countdownInterval);
         
-        // LOCK All UI Icons
         const lockClass = "ph-fill ph-lock-key absolute top-6 right-6 text-slate-600 group-hover:text-red-500 transition text-xl z-20";
         ['ua', 'email', 'validator', 'cpa', 'proxy', 'address', 'mix', 'upcoming', 'dl_clicker'].forEach(id => {
             const icon = document.getElementById(`lock_${id}`);
@@ -113,8 +100,6 @@ function startCountdown(expiryTimestamp) {
         if (distance < 0) {
             clearInterval(countdownInterval);
             timerDiv.innerHTML = '<div class="text-red-500 font-black text-center py-2 bg-red-500/10 rounded-xl border border-red-500/20">ACCESS EXPIRED</div>';
-            const user = JSON.parse(localStorage.getItem('proToolsUser'));
-            if(user.plan !== 'Free') syncUserPlan(user);
             return;
         }
         
@@ -260,7 +245,6 @@ function checkAccess(urlOrAction) {
     } 
     
     if (!user.plan || user.plan === 'Free') { 
-        // Force scroll to VIP input if trying to access tools without plan
         document.getElementById('vipCodeBox').scrollIntoView({behavior:'smooth'});
         alert("🔒 Access Denied: Please enter a VIP code to unlock this feature.");
     } else { 
@@ -273,11 +257,7 @@ function checkAccess(urlOrAction) {
 }
 
 function applyVipFromDash() {
-    executeRedeem('dashVipInput');
-}
-
-function executeRedeem(inputId) {
-    const codeInput = document.getElementById(inputId);
+    const codeInput = document.getElementById('dashVipInput');
     const code = codeInput.value.trim();
     const user = JSON.parse(localStorage.getItem('proToolsUser'));
     
@@ -312,19 +292,4 @@ function executeRedeem(inputId) {
         btn.innerText = originalText;
         btn.disabled = false;
     });
-}
-function verifyVipCode() {
-  const code = document.getElementById('vipInput').value;
-  const url = "https://script.google.com/macros/s/AKfycbwEsHsQfSGxUvKMG4fgbkzAcloaWOWmyReD_qrzYWCjzdxS8o-OWmyTUsHXMTy_qj4Z/exec"; 
-
-  fetch(url + "?action=verifyCode&code=" + code)
-  .then(res => res.json())
-  .then(data => {
-    if(data.status === 'success') {
-      alert("Success! Your " + data.days + " days access is activated.");
-      // এরপর ইউজারকে ড্যাশবোর্ডে রিডাইরেক্ট করুন
-    } else {
-      alert(data.message);
-    }
-  });
 }
