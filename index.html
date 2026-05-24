@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     
     <script>
         tailwind.config = {
@@ -24,49 +25,6 @@
             }
         }
     </script>
-    
-    <style>
-        body { background-color: #020617; color: #f8fafc; overflow-x: hidden; scroll-behavior: smooth; }
-        
-        /* Corporate SaaS Animations */
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-12px); } 100% { transform: translateY(0px); } }
-        .animate-float { animation: float 5s ease-in-out infinite; }
-        @keyframes shine { 0% { left: -100%; } 100% { left: 100%; } }
-        .shine-effect { position: relative; overflow: hidden; }
-        .shine-effect::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); transform: skewX(-25deg); animation: shine 3s infinite; }
-        
-        /* Glassmorphism Panels */
-        .glass-panel { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .glass-panel:hover { border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(16, 185, 129, 0.1); transform: translateY(-5px); }
-        
-        /* Auth Modal Close Button Fix */
-        .modal-close-btn { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.3s; z-index: 60; }
-        .modal-close-btn:hover { background: #ef4444; border-color: #ef4444; color: white; transform: rotate(90deg); }
-
-        /* Scroller */
-        .notice-container { width: 100%; overflow: hidden; white-space: nowrap; box-sizing: border-box; }
-        .notice-text { display: inline-block; padding-left: 100%; animation: notice-scroll 30s linear infinite; }
-        @keyframes notice-scroll { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
-
-        .marquee-container-fast { width: 100%; overflow: hidden; white-space: nowrap; position: relative; }
-        .marquee-content-fast { display: inline-flex; animation: marquee-scroll 50s linear infinite; }
-        .marquee-content-fast:hover { animation-play-state: paused; }
-        @keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-        .breakout-full-width { width: 100vw !important; position: relative !important; left: 50% !important; right: 50% !important; margin-left: -50vw !important; margin-right: -50vw !important; max-width: 100vw !important; }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #020617; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #10b981; }
-
-        .dash-scroll-area { max-height: 800px; overflow-y: auto; overflow-x: hidden; padding-right: 10px; }
-        
-        /* SaaS Style Gradients */
-        .gradient-text { background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(16,185,129,0.12) 0%, rgba(2,6,23,0) 70%); top: -200px; left: -200px; z-index: 0; pointer-events: none; }
-    </style>
 </head>
 <body class="flex flex-col min-h-screen">
 
@@ -84,14 +42,14 @@
         </div>
         <div class="flex items-center gap-5">
             <button id="navAuthBtn" onclick="openAuthModal()" class="px-6 py-2.5 rounded-xl bg-white text-brandBg hover:bg-emerald-50 transition text-sm font-bold shadow-lg shadow-white/5">
-                Get Started
+                Login / Register
             </button>
         </div>
     </nav>
 
     <div id="noticeBarContainer" class="fixed top-[73px] left-0 w-full h-[38px] bg-slate-900 border-b border-white/5 text-emerald-400 text-[11px] md:text-sm font-bold flex items-center z-[40] shadow-md transition-all">
         <div class="notice-container">
-            <div class="notice-text" id="dynamicNotice">🚀 System Online: Please Login or Register and use your VIP code to unlock the Ultimate CPA Marketers Toolkit & Automation Bots.</div>
+            <div class="notice-text" id="dynamicNotice">System Online: Please Login or Register and use your VIP code to unlock the Ultimate CPA Marketers Toolkit & Automation Bots.</div>
         </div>
     </div>
 
@@ -114,15 +72,12 @@
                         <button onclick="openAuthModal()" class="w-full sm:w-auto px-10 py-4 bg-emerald-500 text-white font-bold rounded-2xl hover:bg-emerald-400 transition transform hover:-translate-y-1 shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-2">
                             <i class="ph-bold ph-key text-xl"></i> Access Dashboard
                         </button>
-                        <a href="https://t.me/Digital_it_Institute" target="_blank" class="w-full sm:w-auto px-10 py-4 bg-white/5 text-white font-bold rounded-2xl border border-white/10 hover:bg-white/10 transition flex items-center justify-center gap-2">
-                            <i class="ph-bold ph-paper-plane-tilt text-xl"></i> Contact Support
-                        </a>
                     </div>
                 </header>
 
                 <section class="py-10">
                     <div class="text-center mb-16">
-                        <h2 class="text-3xl md:text-4xl font-extrabold text-white">Premium Tools for CPA Marketers</h2>
+                        <h2 class="text-3xl md:text-4xl font-extrabold text-white">Premium Tools for Marketers</h2>
                         <div class="w-20 h-1.5 bg-emerald-500 mx-auto mt-4 rounded-full"></div>
                     </div>
                     
@@ -136,19 +91,19 @@
                         <div class="glass-panel p-6 group relative cursor-pointer" onclick="openAuthModal()">
                             <i class="ph-fill ph-lock-key absolute top-5 right-5 text-slate-600 group-hover:text-red-500 transition text-xl"></i>
                             <div class="w-14 h-14 bg-blue-500/10 text-blue-400 rounded-2xl flex items-center justify-center text-3xl mb-4"><i class="ph-fill ph-envelope-simple"></i></div>
-                            <h3 class="text-lg font-bold text-white mb-2">Email Generator</h3>
+                            <h3 class="text-lg font-bold text-white mb-2">Bulk Email Generator</h3>
                             <p class="text-xs text-slate-400 font-medium">Create realistic email addresses instantly.</p>
                         </div>
                         <div class="glass-panel p-6 group relative cursor-pointer" onclick="openAuthModal()">
                             <i class="ph-fill ph-lock-key absolute top-5 right-5 text-slate-600 group-hover:text-red-500 transition text-xl"></i>
                             <div class="w-14 h-14 bg-purple-500/10 text-purple-400 rounded-2xl flex items-center justify-center text-3xl mb-4"><i class="ph-fill ph-shield-check"></i></div>
-                            <h3 class="text-lg font-bold text-white mb-2">Email Validator</h3>
+                            <h3 class="text-lg font-bold text-white mb-2">MX Record Validator</h3>
                             <p class="text-xs text-slate-400 font-medium">Verify real-time mail server status.</p>
                         </div>
                         <div class="glass-panel p-6 group relative cursor-pointer" onclick="openAuthModal()">
                             <i class="ph-fill ph-lock-key absolute top-5 right-5 text-slate-600 group-hover:text-red-500 transition text-xl"></i>
                             <div class="w-14 h-14 bg-orange-500/10 text-orange-400 rounded-2xl flex items-center justify-center text-3xl mb-4"><i class="ph-fill ph-globe"></i></div>
-                            <h3 class="text-lg font-bold text-white mb-2">Best CPA Networks</h3>
+                            <h3 class="text-lg font-bold text-white mb-2">CPA Networks</h3>
                             <p class="text-xs text-slate-400 font-medium">Curated list of high-paying platforms.</p>
                         </div>
                         <div class="glass-panel p-6 group relative cursor-pointer" onclick="openAuthModal()">
@@ -172,7 +127,7 @@
                         <div class="glass-panel p-6 group relative cursor-pointer" onclick="openAuthModal()">
                             <i class="ph-fill ph-lock-key absolute top-5 right-5 text-slate-600 group-hover:text-red-500 transition text-xl"></i>
                             <div class="w-14 h-14 bg-cyan-500/10 text-cyan-400 rounded-2xl flex items-center justify-center text-3xl mb-4"><i class="ph-fill ph-rocket"></i></div>
-                            <h3 class="text-lg font-bold text-white mb-2">Upcoming Tools...</h3>
+                            <h3 class="text-lg font-bold text-white mb-2">Upcoming Modules</h3>
                             <p class="text-xs text-slate-400 font-medium">Constant updates with lifetime value.</p>
                         </div>
                     </div>
@@ -189,7 +144,7 @@
                             <div class="w-24 h-24 bg-emerald-500/10 rounded-3xl flex items-center justify-center text-6xl text-emerald-400 animate-float"><i class="ph-fill ph-robot"></i></div>
                             <div class="flex-grow text-center md:text-left">
                                 <h3 class="text-2xl font-bold text-white mb-3">Auto Clicker Bot Pro</h3>
-                                <p class="text-slate-400 text-sm mb-6 leading-relaxed">Advanced mouse & keyboard automation with randomized delay logic to bypass detection. Perfect for CPA signups and repetitive tasks.</p>
+                                <p class="text-slate-400 text-sm mb-6 leading-relaxed">Advanced mouse & keyboard automation with randomized delay logic to bypass detection. Perfect for CPA signups.</p>
                                 <span class="inline-flex items-center gap-2 text-emerald-400 font-bold text-sm bg-emerald-500/10 px-4 py-2 rounded-lg">
                                     <i class="ph-fill ph-lock-key"></i> Unlocks with VIP Code
                                 </span>
@@ -211,19 +166,12 @@
                             <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-blue-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">M</div><div><h4 class="font-bold text-white">Mehedi Hasan</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"Best tools ever! The Useragent generator provided here is premium quality. Highly recommended for CPA marketing."</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
                             <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-pink-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">T</div><div><h4 class="font-bold text-white">Tariqul Islam</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star text-slate-600"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"Initially I was skeptical, but after getting access, I got all tools. Earning steadily now using the bulk email gen."</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
                             <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-purple-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">S</div><div><h4 class="font-bold text-white">Sabbir Hossain</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"The email generator and useragent tools are lifesavers! Saved me hours of manual work and increased conversions."</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
-                            <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-yellow-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">R</div><div><h4 class="font-bold text-white">Rakib Ahmed</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"Everything works flawlessly. The private bot is very stable. Very happy with my access from Digital IT Institute."</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
-                            <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-cyan-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">K</div><div><h4 class="font-bold text-white">Kamrul Hasan</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"Using the Email Validator and Proxy network list. Best tool investment I have made this year!"</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
-                            <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-orange-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">F</div><div><h4 class="font-bold text-white">Fahim Rahman</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"I was struggling with getting approvals, but the Secret Methods from their toolkit got me in."</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
                         </div>
-                        
                         <div class="flex gap-6">
                             <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-emerald-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">A</div><div><h4 class="font-bold text-white">Ariful Islam</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"The Auto Clicker Bot Pro changed my life. Everything is perfectly automated and undetected. Got my first huge payout!"</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
                             <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-blue-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">M</div><div><h4 class="font-bold text-white">Mehedi Hasan</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"Best tools ever! The Useragent generator provided here is premium quality. Highly recommended for CPA marketing."</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
                             <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-pink-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">T</div><div><h4 class="font-bold text-white">Tariqul Islam</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star text-slate-600"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"Initially I was skeptical, but after getting access, I got all tools. Earning steadily now using the bulk email gen."</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
                             <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-purple-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">S</div><div><h4 class="font-bold text-white">Sabbir Hossain</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"The email generator and useragent tools are lifesavers! Saved me hours of manual work and increased conversions."</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
-                            <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-yellow-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">R</div><div><h4 class="font-bold text-white">Rakib Ahmed</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"Everything works flawlessly. The private bot is very stable. Very happy with my access from Digital IT Institute."</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
-                            <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-cyan-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">K</div><div><h4 class="font-bold text-white">Kamrul Hasan</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"Using the Email Validator and Proxy network list. Best tool investment I have made this year!"</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
-                            <div class="bg-[#0f172a] border border-white/10 p-6 rounded-2xl shadow-lg w-[350px] inline-block whitespace-normal align-top border-t-4 border-t-orange-500"><div class="flex gap-4 items-center mb-4"><div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex justify-center items-center font-bold text-xl text-white shadow-md">F</div><div><h4 class="font-bold text-white">Fahim Rahman</h4><div class="flex text-yellow-400 text-xs mt-1"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div></div></div><p class="text-slate-300 text-sm italic mb-4 leading-relaxed line-clamp-3">"I was struggling with getting approvals, but the Secret Methods from their toolkit got me in."</p><div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-2 w-max"><i class="ph-fill ph-check-circle text-lg"></i> Verified User</div></div>
                         </div>
                     </div>
                 </div>
@@ -241,7 +189,9 @@
                 </div>
             </section>
 
-        </div> <div id="dashboard-section" class="hidden px-4 md:px-8 w-full max-w-[1400px] mx-auto animate-fade-in">
+        </div> 
+
+        <div id="dashboard-section" class="hidden px-4 md:px-8 w-full max-w-[1400px] mx-auto animate-fade-in">
             
             <div class="w-full glass-panel border border-emerald-500/20 mb-10 p-6 md:p-12 flex flex-col lg:flex-row lg:items-center justify-between gap-8 relative overflow-hidden">
                 <div class="absolute -top-20 -right-20 w-80 h-80 bg-emerald-500/10 blur-[100px] rounded-full pointer-events-none"></div>
