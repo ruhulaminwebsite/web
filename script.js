@@ -9,6 +9,11 @@ window.onload = function() {
     checkLoginStatus();
 };
 
+function setNotice(msg) {
+    const noticeEl = document.getElementById('dynamicNotice');
+    if(noticeEl) noticeEl.innerText = msg;
+}
+
 function checkLoginStatus() {
     const user = JSON.parse(localStorage.getItem('proToolsUser'));
     if (user && user.isLoggedIn) {
@@ -19,11 +24,13 @@ function checkLoginStatus() {
         const navBtn = document.getElementById('navAuthBtn');
         navBtn.innerHTML = `<i class="ph-bold ph-sign-out mr-1.5"></i> Log Out`;
         navBtn.classList.replace('bg-white', 'bg-red-500');
-        navBtn.classList.replace('text-brandBg', 'text-white');
+        navBtn.classList.replace('text-[#020617]', 'text-white');
         navBtn.onclick = logout;
 
         document.getElementById('dashUserName').innerText = user.name || "Client";
         syncUserPlan(user);
+    } else {
+        setNotice("System Online: Please Login or Register and use your VIP code to unlock the Ultimate CPA Marketers Toolkit & Automation Bots.");
     }
 }
 
@@ -50,28 +57,34 @@ function syncUserPlan(user) {
 }
 
 function updateUIBasedOnPlan(user) {
-    const isPremium = (user.plan && user.plan !== 'Free');
+    const plan = user.plan;
+    const isPremium = (plan && plan !== 'Free');
     
     const vipCodeBox = document.getElementById('vipCodeBox');
     const timerBox = document.getElementById('countdownTimer');
     
     if (isPremium) {
+        setNotice("Account Verified. All premium automation tools and bot software are now active.");
         vipCodeBox.classList.add('hidden');
         timerBox.classList.remove('hidden');
         
         startCountdown(user.expiry);
         
+        // UNLOCK All UI Icons (Visual Change)
         const unlockClass = "ph-fill ph-check-circle absolute top-6 right-6 text-emerald-400 text-xl transition z-20";
         ['ua', 'email', 'validator', 'cpa', 'proxy', 'address', 'mix', 'upcoming', 'dl_clicker'].forEach(id => {
             const icon = document.getElementById(`lock_${id}`);
             if(icon) icon.className = unlockClass;
         });
+
     } else {
+        setNotice("Access Restricted: Please enter your VIP activation code to enable tools and software.");
         vipCodeBox.classList.remove('hidden');
         timerBox.classList.add('hidden');
         
         clearInterval(countdownInterval);
         
+        // LOCK All UI Icons
         const lockClass = "ph-fill ph-lock-key absolute top-6 right-6 text-slate-600 group-hover:text-red-500 transition text-xl z-20";
         ['ua', 'email', 'validator', 'cpa', 'proxy', 'address', 'mix', 'upcoming', 'dl_clicker'].forEach(id => {
             const icon = document.getElementById(`lock_${id}`);
@@ -100,6 +113,8 @@ function startCountdown(expiryTimestamp) {
         if (distance < 0) {
             clearInterval(countdownInterval);
             timerDiv.innerHTML = '<div class="text-red-500 font-black text-center py-2 bg-red-500/10 rounded-xl border border-red-500/20">ACCESS EXPIRED</div>';
+            const user = JSON.parse(localStorage.getItem('proToolsUser'));
+            if(user.plan !== 'Free') syncUserPlan(user);
             return;
         }
         
