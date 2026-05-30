@@ -264,7 +264,7 @@ function checkAccess(urlOrAction) {
         alert("🔒 Access Denied: Please enter a VIP code to unlock this feature.");
     } else { 
         if (urlOrAction === 'dl_clicker') {
-            window.open("https://drive.google.com/file/d/1xab3lwinRthis9Cn_-1NZMaOvBX7vcOE/view?usp=sharing", '_blank');
+            window.open("https://drive.google.com/file/d/1-7wTfq9tauK7UFKtbU5AOKVIUfHAibPs/view?usp=sharing", '_blank');
         } else {
             window.location.href = urlOrAction;
         }
