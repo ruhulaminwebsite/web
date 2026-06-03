@@ -1,173 +1,171 @@
-<!-- ========================================= -->
-<!-- 🔒 VIP SECURITY CHECK (DO NOT REMOVE) 🔒 -->
-<!-- ========================================= -->
 <script>
     (function() {
         const user = JSON.parse(localStorage.getItem('proToolsUser'));
         const now = new Date().getTime();
 
-        // ১. যদি লগইন করা না থাকে
         if (!user || !user.isLoggedIn) {
             alert("⚠️ Please login to access premium tools!");
-            window.location.replace("index.html"); // হোমপেজে পাঠিয়ে দেবে
-        } 
-        // ২. যদি প্যাকেজ কেনা না থাকে বা ফ্রি ইউজার হয়
-        else if (!user.plan || user.plan === 'Free') {
-            alert("🔒 Access Denied! Please buy a VIP package to unlock this tool.");
+            window.location.replace("index.html");
+        } else if (!user.plan || user.plan === 'Free') {
+            alert("🔒 Access Denied! Please enter a VIP code to unlock this tool.");
             window.location.replace("index.html"); 
-        } 
-        // ৩. যদি প্যাকেজের মেয়াদ শেষ হয়ে যায়
-        else if (user.expiry && now > user.expiry) {
-            alert("⏳ Your premium package has expired! Please renew.");
+        } else if (user.expiry && now > user.expiry) {
+            alert("⏳ Your premium access has expired! Please renew.");
             window.location.replace("index.html");
         }
     })();
 </script>
 <!-- ========================================= -->
 
-
-
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/@phosphor-icons/web"></script>
-<script>
-  tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'Plus Jakarta Sans', 'sans-serif'] }, colors: { darkBase: '#020617', darkPanel: '#09090b', brandYellow: '#facc15', brandGreen: '#10b981' } } } }
-</script>
-<style> 
-  body { background-color: #09090b !important; color: #f8fafc !important; margin:0; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-  .site-header, .site-footer, .page-title, .entry-header { display: none !important; }
-  
-  .neon-panel { background-color: #12121a; border: 1px solid #27272a; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); transition: all 0.3s ease; }
-  .glow-green:hover { border-color: rgba(16, 185, 129, 0.5) !important; box-shadow: 0 0 30px rgba(16, 185, 129, 0.2) !important; transform: translateY(-5px); }
-  
-  /* Custom Scrollbar */
-  ::-webkit-scrollbar { width: 8px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
-  ::-webkit-scrollbar-thumb:hover { background: #10b981; }
-</style>
-
-<nav class="fixed top-0 left-0 w-full h-[70px] z-50 px-4 md:px-6 flex justify-between items-center bg-[#09090b]/95 backdrop-blur-xl border-b border-zinc-800">
-    <div class="flex items-center gap-3">
-        <div class="w-10 h-10 flex items-center justify-center bg-green-500/10 rounded-xl text-green-400 border border-green-500/30 shadow-[0_0_15px_rgba(16,185,129,0.2)] shrink-0">
-            <i class="ph-fill ph-globe text-2xl"></i>
-        </div>
-        <div>
-            <span class="text-[10px] text-green-400 font-bold block leading-none mb-1 uppercase tracking-wider">Premium Tool</span>
-            <span class="text-sm md:text-lg font-black text-white leading-none">Best CPA Networks</span>
-        </div>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best CPA Networks - Digital IT Institute</title>
     
-    <button onclick="window.location.href='/?dashboard=true'" class="px-4 py-2 md:px-5 md:py-2.5 rounded-lg bg-zinc-900 border border-zinc-700 text-white hover:bg-green-500 hover:text-black hover:border-green-400 transition-all font-bold text-xs md:text-sm flex items-center gap-2 shrink-0">
-        <i class="ph-bold ph-arrow-left"></i> <span class="hidden md:inline">Dashboard</span>
-    </button>
-</nav>
-
-<div class="w-full min-h-screen pt-[100px] pb-20 px-4 md:px-6 max-w-[1400px] mx-auto flex flex-col items-center">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
-    <div class="text-center mb-12 max-w-2xl mx-auto">
-        <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-4">Self SignUp Top CPA Networks</h1>
-        <p class="text-green-400 font-medium text-sm md:text-base">Get instant approval and high-paying offers by joining these hand-picked secret CPA networks. Best for our Self SignUp methods.</p>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+                    colors: { 
+                        brandBg: '#020617', 
+                        brandSurface: '#0f172a',
+                        brandAccent: '#10b981',
+                        brandSecondary: '#3b82f6'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style> 
+      body { background-color: #020617 !important; color: #f8fafc !important; margin:0; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+      
+      .glass-panel { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+      .glass-panel:hover { border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(16, 185, 129, 0.1); transform: translateY(-5px); }
+      
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+      ::-webkit-scrollbar-thumb:hover { background: #10b981; }
+
+      .gradient-text { background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Top Navigation -->
+    <nav class="fixed top-0 left-0 w-full h-[75px] z-50 px-6 flex justify-between items-center bg-[#020617]/80 backdrop-blur-xl border-b border-white/5">
+        <div class="flex items-center gap-4">
+            <button onclick="window.location.href='index.html?dashboard=true'" class="text-slate-400 hover:text-white transition mr-2 bg-slate-800/50 hover:bg-emerald-600 p-2.5 rounded-full border border-white/5">
+                <i class="ph-bold ph-arrow-left text-lg"></i>
+            </button>
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 flex items-center justify-center bg-gradient-to-br from-emerald-500 to-blue-600 rounded-xl shadow-md hidden sm:flex">
+                    <i class="ph-bold ph-globe text-white text-xl"></i>
+                </div>
+                <div>
+                    <span class="text-base md:text-lg font-extrabold text-white leading-none block tracking-tight">Best CPA Networks</span>
+                    <span class="text-[11px] text-emerald-400 font-bold block mt-1 tracking-widest uppercase">Digital IT Institute</span>
+                </div>
+            </div>
+        </div>
+        <div class="hidden sm:flex text-xs font-bold text-slate-400 gap-5 bg-slate-900 border border-white/5 px-4 py-2 rounded-full">
+            <span class="flex items-center gap-1.5"><i class="ph-fill ph-check-circle text-emerald-500 text-sm"></i> High Payouts</span>
+            <span class="flex items-center gap-1.5"><i class="ph-fill ph-check-circle text-blue-500 text-sm"></i> Instant Approval</span>
+        </div>
+    </nav>
+
+    <div class="w-full min-h-screen pt-[110px] pb-20 px-4 md:px-6 max-w-[1400px] mx-auto flex flex-col items-center">
+        
+        <div class="text-center mb-12 max-w-2xl mx-auto">
+            <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">Top CPA Networks <br> <span class="gradient-text">For Self Sign-Up</span></h1>
+            <p class="text-slate-400 font-medium text-sm md:text-lg">Get instant approval and high-paying offers by joining these hand-picked secret CPA networks. Optimized for automation bots.</p>
+        </div>
+
+        <!-- Dynamic Grid where networks will be injected -->
+        <div id="networks-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full">
+            <!-- Items injected by JS -->
+        </div>
+
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full">
+    <!-- Script to easily manage CPA networks -->
+    <script>
+        // ==============================================================
+        // ⚙️ MANAGE YOUR CPA NETWORKS HERE
+        // You can change Name, Link, Offer Type, and Min Payout anytime.
+        // ==============================================================
+        const cpaNetworks = [
+            { id: 1, name: "CPA Grip", link: "https://cpagrip.com", offerType: "Fresh Offer", payout: "$50" },
+            { id: 2, name: "CPA Junkie", link: "https://aff.cpajunkie.com/publisher/register?ref=1559", offerType: "Dating & Smartlink", payout: "$30" },
+            { id: 3, name: "CpaZon", link: "https://aff.cpazon.com/publisher/register?ref=2415", offerType: "Dating & Smartlink", payout: "$30" },
+            { id: 4, name: "Exnessoffer", link: "https://aff.exnessoffer.com/register?refer_id=1793", offerType: "Dating & Smartlink", payout: "$50" },
+            { id: 5, name: "AdblueMedia", link: "https://adbluemedia.com/register", offerType: "Fresh Offer", payout: "$50" },
+            { id: 6, name: "Affmine", link: "https://www.affmine.com/join", offerType: "Fresh Offer", payout: "$50" },
+            { id: 7, name: "Advertica", link: "https://advertica.com", offerType: "Fresh & Dating Offer", payout: "$10" },
+            { id: 8, name: "CPA Lead", link: "https://cpalead.com", offerType: "App Installs & Surveys", payout: "$10" },
+            { id: 9, name: "MaxBounty", link: "https://maxbounty.com", offerType: "Premium Offers", payout: "$100" },
+            { id: 10, name: "ClickDealer", link: "https://clickdealer.com", offerType: "Dating & Sweeps", payout: "$50" },
+            { id: 11, name: "AdWork Media", link: "https://adworkmedia.com", offerType: "Content Locking", payout: "$35" },
+            { id: 12, name: "MyLead", link: "https://myidead.com", offerType: "Smartlinks & Dating", payout: "$50" },
+            { id: 13, name: "LosPollos", link: "https://lospollos.com", offerType: "Smartlink Global", payout: "$50" },
+            { id: 14, name: "OGAds", link: "https://ogads.com", offerType: "Mobile Content Locking", payout: "$50" },
+            { id: 15, name: "CPA Build", link: "https://cpabuild.com", offerType: "Templates & Sweeps", payout: "$50" },
+            { id: 16, name: "Mobidea", link: "https://mobidea.com", offerType: "Mobile & Smartlink", payout: "$50" },
+            { id: 17, name: "Toro Advertising", link: "https://toroadvertising.com", offerType: "Surveys & Sweeps", payout: "$50" },
+            { id: 18, name: "Advidi", link: "https://advidi.com", offerType: "Dating & Health", payout: "$500" },
+            { id: 19, name: "CrackRevenue", link: "https://crackrevenue.com", offerType: "Dating & Cams", payout: "$100" },
+            { id: 20, name: "CrakRevenue", link: "https://crakrevenue.com", offerType: "Adult & Dating", payout: "$100" }
+        ];
 
-        <div class="neon-panel glow-green p-6 md:p-8 flex flex-col items-center text-center justify-between border-t-2 border-t-green-500 bg-gradient-to-b from-[#12121a] to-[#09090b]">
-            <div>
-                <div class="w-16 h-16 bg-green-500/10 text-green-400 rounded-full flex items-center justify-center mx-auto mb-5 border border-green-500/20">
-                    <i class="ph-bold ph-link text-3xl drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-2">MountAff</h3>
-                <p class="text-xs text-yellow-400 font-bold mb-6 bg-zinc-800/50 py-2 px-3 rounded-lg">Dating Offer & Smartlink <br><span class="text-green-400 mt-1 block">Minimum Payment $50</span></p>
-            </div>
-            <a href="https://mountaff.com/" target="_blank" class="w-full py-3 bg-zinc-800 hover:bg-green-500 text-white hover:text-black font-bold text-sm rounded-lg transition-colors flex justify-center items-center gap-2">
-                Join Network <i class="ph-bold ph-arrow-square-out"></i>
-            </a>
-        </div>
+        // Function to render networks dynamically
+        function renderNetworks() {
+            const grid = document.getElementById('networks-grid');
+            grid.innerHTML = '';
 
-        <div class="neon-panel glow-green p-6 md:p-8 flex flex-col items-center text-center justify-between border-t-2 border-t-green-500 bg-gradient-to-b from-[#12121a] to-[#09090b]">
-            <div>
-                <div class="w-16 h-16 bg-green-500/10 text-green-400 rounded-full flex items-center justify-center mx-auto mb-5 border border-green-500/20">
-                    <i class="ph-bold ph-link text-3xl drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-2">Exness Offer</h3>
-                <p class="text-xs text-yellow-400 font-bold mb-6 bg-zinc-800/50 py-2 px-3 rounded-lg">Dating Offer & Smartlink <br><span class="text-green-400 mt-1 block">Minimum Payment $30</span></p>
-            </div>
-            <a href="https://exnessoffer.io/" target="_blank" class="w-full py-3 bg-zinc-800 hover:bg-green-500 text-white hover:text-black font-bold text-sm rounded-lg transition-colors flex justify-center items-center gap-2">
-                Join Network <i class="ph-bold ph-arrow-square-out"></i>
-            </a>
-        </div>
+            cpaNetworks.forEach((network) => {
+                const cardHtml = `
+                    <div class="glass-panel p-6 md:p-8 flex flex-col items-center text-center justify-between border-t-2 border-t-emerald-500 bg-brandSurface relative group">
+                        <div class="absolute top-4 left-4 w-8 h-8 rounded-full bg-slate-800 border border-white/5 flex items-center justify-center text-xs font-bold text-slate-400">
+                            #${network.id}
+                        </div>
+                        <div class="w-full mt-4">
+                            <div class="w-16 h-16 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-5 border border-emerald-500/20 group-hover:scale-110 transition-transform">
+                                <i class="ph-bold ph-link text-3xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2 tracking-tight">${network.name}</h3>
+                            <div class="bg-[#020617] border border-white/5 py-3 px-4 rounded-xl mb-6 shadow-inner">
+                                <p class="text-xs text-blue-400 font-bold uppercase tracking-widest mb-1">${network.offerType}</p>
+                                <p class="text-sm text-emerald-400 font-bold">Min Payout: ${network.payout}</p>
+                            </div>
+                        </div>
+                        <a href="${network.link}" target="_blank" class="w-full py-3.5 bg-slate-800 hover:bg-emerald-600 text-white font-bold text-sm rounded-xl transition-colors flex justify-center items-center gap-2 border border-white/5 hover:border-emerald-500 shadow-md">
+                            Join Network <i class="ph-bold ph-arrow-square-out text-lg"></i>
+                        </a>
+                    </div>
+                `;
+                grid.innerHTML += cardHtml;
+            });
+        }
 
-        <div class="neon-panel glow-green p-6 md:p-8 flex flex-col items-center text-center justify-between border-t-2 border-t-green-500 bg-gradient-to-b from-[#12121a] to-[#09090b]">
-            <div>
-                <div class="w-16 h-16 bg-green-500/10 text-green-400 rounded-full flex items-center justify-center mx-auto mb-5 border border-green-500/20">
-                    <i class="ph-bold ph-link text-3xl drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-2">Datify.Link</h3>
-                <p class="text-xs text-yellow-400 font-bold mb-6 bg-zinc-800/50 py-2 px-3 rounded-lg">Dating Offer & Smartlink <br><span class="text-green-400 mt-1 block">Minimum Payment $30</span></p>
-            </div>
-            <a href="https://datify.link/en/registration" target="_blank" class="w-full py-3 bg-zinc-800 hover:bg-green-500 text-white hover:text-black font-bold text-sm rounded-lg transition-colors flex justify-center items-center gap-2">
-                Join Network <i class="ph-bold ph-arrow-square-out"></i>
+        // Initialize rendering
+        renderNetworks();
 
-            </a>
-        </div>
-        <div class="neon-panel glow-green p-6 md:p-8 flex flex-col items-center text-center justify-between border-t-2 border-t-green-500 bg-gradient-to-b from-[#12121a] to-[#09090b]">
-            <div>
-                <div class="w-16 h-16 bg-green-500/10 text-green-400 rounded-full flex items-center justify-center mx-auto mb-5 border border-green-500/20">
-                    <i class="ph-bold ph-link text-3xl drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-2">AdblueMedia</h3>
-                <p class="text-xs text-yellow-400 font-bold mb-6 bg-zinc-800/50 py-2 px-3 rounded-lg">Fresh Offer <br><span class="text-green-400 mt-1 block">Minimum Payment $50</span></p>
-            </div>
-            <a href="https://adbluemedia.com/register" target="_blank" class="w-full py-3 bg-zinc-800 hover:bg-green-500 text-white hover:text-black font-bold text-sm rounded-lg transition-colors flex justify-center items-center gap-2">
-                Join Network <i class="ph-bold ph-arrow-square-out"></i>
-            </a>
-        </div>
-		<div class="neon-panel glow-green p-6 md:p-8 flex flex-col items-center text-center justify-between border-t-2 border-t-green-500 bg-gradient-to-b from-[#12121a] to-[#09090b]">
-            <div>
-                <div class="w-16 h-16 bg-green-500/10 text-green-400 rounded-full flex items-center justify-center mx-auto mb-5 border border-green-500/20">
-                    <i class="ph-bold ph-link text-3xl drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-2">Cpagrip</h3>
-                <p class="text-xs text-yellow-400 font-bold mb-6 bg-zinc-800/50 py-2 px-3 rounded-lg">Fresh Offer <br><span class="text-green-400 mt-1 block">Minimum Payment $50</span></p>
-            </div>
-            <a href="https://www.cpagrip.com/signup.php" target="_blank" class="w-full py-3 bg-zinc-800 hover:bg-green-500 text-white hover:text-black font-bold text-sm rounded-lg transition-colors flex justify-center items-center gap-2">
-                Join Network <i class="ph-bold ph-arrow-square-out"></i>
-            </a>
-        </div>
-		<div class="neon-panel glow-green p-6 md:p-8 flex flex-col items-center text-center justify-between border-t-2 border-t-green-500 bg-gradient-to-b from-[#12121a] to-[#09090b]">
-            <div>
-                <div class="w-16 h-16 bg-green-500/10 text-green-400 rounded-full flex items-center justify-center mx-auto mb-5 border border-green-500/20">
-                    <i class="ph-bold ph-link text-3xl drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-2">Affmine</h3>
-                <p class="text-xs text-yellow-400 font-bold mb-6 bg-zinc-800/50 py-2 px-3 rounded-lg">Fresh Offer <br><span class="text-green-400 mt-1 block">Minimum Payment $50</span></p>
-            </div>
-            <a href="https://www.affmine.com/join" target="_blank" class="w-full py-3 bg-zinc-800 hover:bg-green-500 text-white hover:text-black font-bold text-sm rounded-lg transition-colors flex justify-center items-center gap-2">
-                Join Network <i class="ph-bold ph-arrow-square-out"></i>
-            </a>
-        </div>
-		
-		<div class="neon-panel glow-green p-6 md:p-8 flex flex-col items-center text-center justify-between border-t-2 border-t-green-500 bg-gradient-to-b from-[#12121a] to-[#09090b]">
-            <div>
-                <div class="w-16 h-16 bg-green-500/10 text-green-400 rounded-full flex items-center justify-center mx-auto mb-5 border border-green-500/20">
-                    <i class="ph-bold ph-link text-3xl drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-2">Advertica</h3>
-                <p class="text-xs text-yellow-400 font-bold mb-6 bg-zinc-800/50 py-2 px-3 rounded-lg">Fresh & Dating Offer <br><span class="text-green-400 mt-1 block">Minimum Payment $10</span></p>
-            </div>
-            <a href="https://advertica.com" target="_blank" class="w-full py-3 bg-zinc-800 hover:bg-green-500 text-white hover:text-black font-bold text-sm rounded-lg transition-colors flex justify-center items-center gap-2">
-                Join Network <i class="ph-bold ph-arrow-square-out"></i>
-            </a>
-        </div>
-		
-    </div>
-</div>
-
-<script>
-    document.addEventListener('contextmenu', event => event.preventDefault());
-    document.onkeydown = function(e) {
-        if (e.keyCode == 123) return false;
-        if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 67 || e.keyCode == 74)) return false;
-        if (e.ctrlKey && (e.keyCode == 85 || e.keyCode == 83)) return false;
-    };
-</script>
+        // Security
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123) return false;
+            if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 67 || e.keyCode == 74)) return false;
+            if (e.ctrlKey && (e.keyCode == 85 || e.keyCode == 83)) return false;
+        };
+    </script>
+</body>
+</html>
