@@ -1,245 +1,153 @@
-<!-- ========================================= -->
-<!-- 🔒 VIP SECURITY CHECK (DO NOT REMOVE) 🔒 -->
-<!-- ========================================= -->
 <script>
     (function() {
         const user = JSON.parse(localStorage.getItem('proToolsUser'));
         const now = new Date().getTime();
 
-        // ১. যদি লগইন করা না থাকে
         if (!user || !user.isLoggedIn) {
             alert("⚠️ Please login to access premium tools!");
-            window.location.replace("index.html"); // হোমপেজে পাঠিয়ে দেবে
-        } 
-        // ২. যদি প্যাকেজ কেনা না থাকে বা ফ্রি ইউজার হয়
-        else if (!user.plan || user.plan === 'Free') {
-            alert("🔒 Access Denied! Please buy a VIP package to unlock this tool.");
+            window.location.replace("index.html");
+        } else if (!user.plan || user.plan === 'Free') {
+            alert("🔒 Access Denied! Please enter a VIP code to unlock this tool.");
             window.location.replace("index.html"); 
-        } 
-        // ৩. যদি প্যাকেজের মেয়াদ শেষ হয়ে যায়
-        else if (user.expiry && now > user.expiry) {
-            alert("⏳ Your premium package has expired! Please renew.");
+        } else if (user.expiry && now > user.expiry) {
+            alert("⏳ Your premium access has expired! Please renew.");
             window.location.replace("index.html");
         }
     })();
 </script>
-<!-- ========================================= -->
-
-
-
-
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/@phosphor-icons/web"></script>
-<script>
-  tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'Plus Jakarta Sans', 'sans-serif'] }, colors: { darkBase: '#020617', darkPanel: '#09090b', brandYellow: '#facc15', brandGreen: '#10b981', brandAmber: '#f59e0b' } } } }
-</script>
-<style> 
-  body { background-color: #09090b !important; color: #f8fafc !important; margin:0; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-  .site-header, .site-footer, .page-title, .entry-header { display: none !important; }
-  
-  .neon-panel { background-color: #12121a; border: 1px solid #27272a; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); transition: all 0.3s ease; }
-  .glow-amber:hover { border-color: rgba(245, 158, 11, 0.5) !important; box-shadow: 0 0 30px rgba(245, 158, 11, 0.2) !important; transform: translateY(-5px); }
-  
-  /* Custom Scrollbar */
-  ::-webkit-scrollbar { width: 8px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
-  ::-webkit-scrollbar-thumb:hover { background: #f59e0b; }
-</style>
-
-<nav class="fixed top-0 left-0 w-full h-[70px] z-50 px-4 md:px-6 flex justify-between items-center bg-[#09090b]/95 backdrop-blur-xl border-b border-zinc-800">
-    <div class="flex items-center gap-3">
-        <div class="w-10 h-10 flex items-center justify-center bg-amber-500/10 rounded-xl text-amber-400 border border-amber-500/30 shadow-[0_0_15px_rgba(245,158,11,0.2)] shrink-0">
-            <i class="ph-fill ph-tree-structure text-2xl"></i>
-        </div>
-        <div>
-            <span class="text-[10px] text-amber-400 font-bold block leading-none mb-1 uppercase tracking-wider">Premium Tool</span>
-            <span class="text-sm md:text-lg font-black text-white leading-none">Best Proxy Lists</span>
-        </div>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Proxy Lists - Digital IT Institute</title>
     
-    <button onclick="window.location.href='/?dashboard=true'" class="px-4 py-2 md:px-5 md:py-2.5 rounded-lg bg-zinc-900 border border-zinc-700 text-white hover:bg-amber-500 hover:text-black hover:border-amber-400 transition-all font-bold text-xs md:text-sm flex items-center gap-2 shrink-0">
-        <i class="ph-bold ph-arrow-left"></i> <span class="hidden md:inline">Dashboard</span>
-    </button>
-</nav>
-
-<div class="w-full min-h-screen pt-[100px] pb-20 px-4 md:px-6 max-w-[1400px] mx-auto flex flex-col items-center">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
-    <div class="text-center mb-12 max-w-2xl mx-auto">
-        <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-4">Elite Residential & Socks5 Proxies</h1>
-        <p class="text-zinc-400 font-medium text-sm md:text-base">High-quality IPs for CPA Self SignUp and Account Creation. Choose the best proxy package according to your budget and needs.</p>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+                    colors: { 
+                        brandBg: '#020617', 
+                        brandSurface: '#0f172a',
+                        brandAccent: '#10b981',
+                        brandSecondary: '#3b82f6'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style> 
+      body { background-color: #020617 !important; color: #f8fafc !important; margin:0; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+      
+      .glass-panel { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+      .glass-panel:hover { border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(16, 185, 129, 0.1); transform: translateY(-5px); }
+      
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+      ::-webkit-scrollbar-thumb:hover { background: #10b981; }
+
+      .gradient-text { background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <nav class="fixed top-0 left-0 w-full h-[75px] z-50 px-6 flex justify-between items-center bg-[#020617]/80 backdrop-blur-xl border-b border-white/5">
+        <div class="flex items-center gap-4">
+            <button onclick="window.location.href='index.html?dashboard=true'" class="text-slate-400 hover:text-white transition mr-2 bg-slate-800/50 hover:bg-emerald-600 p-2.5 rounded-full border border-white/5">
+                <i class="ph-bold ph-arrow-left text-lg"></i>
+            </button>
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 flex items-center justify-center bg-gradient-to-br from-emerald-500 to-blue-600 rounded-xl shadow-md hidden sm:flex">
+                    <i class="ph-bold ph-tree-structure text-white text-xl"></i>
+                </div>
+                <div>
+                    <span class="text-base md:text-lg font-extrabold text-white leading-none block tracking-tight">Premium Proxy Lists</span>
+                    <span class="text-[11px] text-emerald-400 font-bold block mt-1 tracking-widest uppercase">Digital IT Institute</span>
+                </div>
+            </div>
+        </div>
+        <div class="hidden sm:flex text-xs font-bold text-slate-400 gap-5 bg-slate-900 border border-white/5 px-4 py-2 rounded-full">
+            <span class="flex items-center gap-1.5"><i class="ph-fill ph-check-circle text-emerald-500 text-sm"></i> Datacenter IPs</span>
+            <span class="flex items-center gap-1.5"><i class="ph-fill ph-check-circle text-blue-500 text-sm"></i> Residential IPs</span>
+        </div>
+    </nav>
+
+    <div class="w-full min-h-screen pt-[110px] pb-20 px-4 md:px-6 max-w-[1400px] mx-auto flex flex-col items-center">
+        
+        <div class="text-center mb-12 max-w-2xl mx-auto">
+            <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">Trusted Proxy Providers <br> <span class="gradient-text">For Safe Automation</span></h1>
+            <p class="text-slate-400 font-medium text-sm md:text-lg">Secure your accounts and bypass restrictions with our recommended residential and datacenter proxy networks.</p>
+        </div>
+
+        <div id="proxies-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full">
+            </div>
+
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full">
+    <script>
+        // ==============================================================
+        // MANAGE YOUR PROXY NETWORKS HERE
+        // You can change Name, Plan, Price, and Link anytime.
+        // ==============================================================
+        const proxyNetworks = [
+            { id: 1, name: "Cliproxy", plan: "500 IPs - 30 Day", price: "4600 Tk (+VAT)", link: "https://share.cliproxy.com/share/uyzacuaph" },
+            { id: 2, name: "Proxy-Seller", plan: "IPv4 Datacenter", price: "$2.50 / IP", link: "https://proxy-seller.com" },
+            { id: 3, name: "Smartproxy", plan: "Residential - 1GB", price: "$7.00 / GB", link: "https://smartproxy.com" },
+            { id: 4, name: "IPRoyal", plan: "Static Residential", price: "$2.40 / IP", link: "https://iproyal.com" },
+            { id: 5, name: "Webshare", plan: "Rotating IPs", price: "$5.41 / Mo", link: "https://webshare.io" },
+            { id: 6, name: "Oxylabs", plan: "Pay as you go", price: "$15.00 / GB", link: "https://oxylabs.io" },
+            { id: 7, name: "Bright Data", plan: "Residential Proxies", price: "$15.00 / GB", link: "https://brightdata.com" },
+            { id: 8, name: "NetNut", plan: "Static ISP Proxies", price: "$20.00 / Mo", link: "https://netnut.io" }
+        ];
 
-        <div class="neon-panel glow-amber p-6 md:p-8 flex flex-col items-center text-center justify-between border-t-2 border-t-amber-500 bg-gradient-to-b from-[#12121a] to-[#09090b]">
-            <div class="w-full">
-                <div class="w-16 h-16 bg-amber-500/10 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-5 border border-amber-500/20">
-                    <i class="ph-bold ph-wifi-high text-3xl drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-3">9Proxy</h3>
-                <div class="bg-zinc-800/50 p-3 rounded-lg border border-zinc-700/50 w-full mb-6">
-                    <p class="text-xs text-zinc-300 font-bold mb-1">5 Gb - $15+ VAT - 3 Day</p>
-                    <p class="text-amber-400 font-black text-lg">1600 Tk</p>
-                </div>
-            </div>
-            <a href="https://9proxy.com/" target="_blank" class="w-full py-3 bg-zinc-800 hover:bg-amber-500 text-white hover:text-black font-bold text-sm rounded-lg transition-colors flex justify-center items-center gap-2">
-                Buy Proxy <i class="ph-bold ph-arrow-square-out"></i>
-            </a>
-        </div>
+        // Function to render proxies dynamically
+        function renderProxies() {
+            const grid = document.getElementById('proxies-grid');
+            grid.innerHTML = '';
 
-        <div class="neon-panel glow-amber p-6 md:p-8 flex flex-col items-center text-center justify-between border-t-2 border-t-amber-500 bg-gradient-to-b from-[#12121a] to-[#09090b]">
-            <div class="w-full">
-                <div class="w-16 h-16 bg-amber-500/10 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-5 border border-amber-500/20">
-                    <i class="ph-bold ph-wifi-high text-3xl drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-3">9Proxy ISP</h3>
-                <div class="bg-zinc-800/50 p-3 rounded-lg border border-zinc-700/50 w-full mb-6">
-                    <p class="text-xs text-zinc-300 font-bold mb-1">100 IPs - $10+ VAT - 180 Day</p>
-                    <p class="text-amber-400 font-black text-lg">1100 Tk</p>
-                </div>
-            </div>
-            <a href="https://9proxy.com/pricing" target="_blank" class="w-full py-3 bg-zinc-800 hover:bg-amber-500 text-white hover:text-black font-bold text-sm rounded-lg transition-colors flex justify-center items-center gap-2">
-                Buy Proxy <i class="ph-bold ph-arrow-square-out"></i>
-            </a>
-        </div>
+            proxyNetworks.forEach((proxy) => {
+                const cardHtml = `
+                    <div class="glass-panel p-6 md:p-8 flex flex-col items-center text-center justify-between border-t-2 border-t-blue-500 bg-brandSurface relative group">
+                        <div class="absolute top-4 left-4 w-8 h-8 rounded-full bg-slate-800 border border-white/5 flex items-center justify-center text-xs font-bold text-slate-400">
+                            #${proxy.id}
+                        </div>
+                        <div class="w-full mt-4">
+                            <div class="w-16 h-16 bg-blue-500/10 text-blue-400 rounded-full flex items-center justify-center mx-auto mb-5 border border-blue-500/20 group-hover:scale-110 transition-transform">
+                                <i class="ph-bold ph-wifi-high text-3xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2 tracking-tight">${proxy.name}</h3>
+                            <div class="bg-[#020617] border border-white/5 py-3 px-4 rounded-xl mb-6 shadow-inner">
+                                <p class="text-xs text-slate-400 font-bold mb-1">${proxy.plan}</p>
+                                <p class="text-sm text-emerald-400 font-black">${proxy.price}</p>
+                            </div>
+                        </div>
+                        <a href="${proxy.link}" target="_blank" class="w-full py-3.5 bg-slate-800 hover:bg-blue-600 text-white font-bold text-sm rounded-xl transition-colors flex justify-center items-center gap-2 border border-white/5 hover:border-blue-500 shadow-md">
+                            Buy Proxy <i class="ph-bold ph-arrow-square-out text-lg"></i>
+                        </a>
+                    </div>
+                `;
+                grid.innerHTML += cardHtml;
+            });
+        }
 
-        <div class="neon-panel glow-amber p-6 md:p-8 flex flex-col items-center text-center justify-between border-t-2 border-t-amber-500 bg-gradient-to-b from-[#12121a] to-[#09090b]">
-            <div class="w-full">
-                <div class="w-16 h-16 bg-amber-500/10 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-5 border border-amber-500/20">
-                    <i class="ph-bold ph-wifi-high text-3xl drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-3">Dataimpulse</h3>
-                <div class="bg-zinc-800/50 p-3 rounded-lg border border-zinc-700/50 w-full mb-6">
-                    <p class="text-xs text-zinc-300 font-bold mb-1">5 Gb - $5+ VAT - 30 Day</p>
-                    <p class="text-amber-400 font-black text-lg">820 Tk</p>
-                </div>
-            </div>
-            <a href="https://dataimpulse.com/?aff=79223" target="_blank" class="w-full py-3 bg-zinc-800 hover:bg-amber-500 text-white hover:text-black font-bold text-sm rounded-lg transition-colors flex justify-center items-center gap-2">
-                Buy Proxy <i class="ph-bold ph-arrow-square-out"></i>
-            </a>
-        </div>
+        // Initialize rendering
+        renderProxies();
 
-        <div class="neon-panel glow-amber p-6 md:p-8 flex flex-col items-center text-center justify-between border-t-2 border-t-amber-500 bg-gradient-to-b from-[#12121a] to-[#09090b]">
-            <div class="w-full">
-                <div class="w-16 h-16 bg-amber-500/10 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-5 border border-amber-500/20">
-                    <i class="ph-bold ph-wifi-high text-3xl drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-3">NovProxy ISP</h3>
-                <div class="bg-zinc-800/50 p-3 rounded-lg border border-zinc-700/50 w-full mb-6">
-                    <p class="text-xs text-zinc-300 font-bold mb-1">100 IPs - $10+ VAT - 30 Day</p>
-                    <p class="text-amber-400 font-black text-lg">1100 Tk</p>
-                </div>
-            </div>
-            <a href="https://novproxy.com/pricing/isp-socks5/" class="w-full py-3 bg-zinc-800 hover:bg-amber-500 text-white hover:text-black font-bold text-sm rounded-lg transition-colors flex justify-center items-center gap-2">
-                Buy Proxy <i class="ph-bold ph-arrow-square-out"></i>
-            </a>
-        </div>
-
-        <div class="neon-panel glow-amber p-6 md:p-8 flex flex-col items-center text-center justify-between border-t-2 border-t-amber-500 bg-gradient-to-b from-[#12121a] to-[#09090b]">
-            <div class="w-full">
-                <div class="w-16 h-16 bg-amber-500/10 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-5 border border-amber-500/20">
-                    <i class="ph-bold ph-wifi-high text-3xl drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-3">Swift Proxy</h3>
-                <div class="bg-zinc-800/50 p-3 rounded-lg border border-zinc-700/50 w-full mb-6">
-                    <p class="text-xs text-zinc-300 font-bold mb-1">5 Gb - $15+ VAT - 30 Day</p>
-                    <p class="text-amber-400 font-black text-lg">1600 Tk</p>
-                </div>
-            </div>
-            <a href="https://www.swiftproxy.net/pricing/residential-proxies" target="_blank" class="w-full py-3 bg-zinc-800 hover:bg-amber-500 text-white hover:text-black font-bold text-sm rounded-lg transition-colors flex justify-center items-center gap-2">
-                Buy Proxy <i class="ph-bold ph-arrow-square-out"></i>
-            </a>
-        </div>
-
-        <div class="neon-panel glow-amber p-6 md:p-8 flex flex-col items-center text-center justify-between border-t-2 border-t-amber-500 bg-gradient-to-b from-[#12121a] to-[#09090b]">
-            <div class="w-full">
-                <div class="w-16 h-16 bg-amber-500/10 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-5 border border-amber-500/20">
-                    <i class="ph-bold ph-wifi-high text-3xl drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-3">Cliproxy</h3>
-                <div class="bg-zinc-800/50 p-3 rounded-lg border border-zinc-700/50 w-full mb-6">
-                    <p class="text-xs text-zinc-300 font-bold mb-1">5 Gb - $10+ VAT - 30 Day</p>
-                    <p class="text-amber-400 font-black text-lg">1530 Tk</p>
-                </div>
-            </div>
-            <a href="https://cliproxy.com/" target="_blank" class="w-full py-3 bg-zinc-800 hover:bg-amber-500 text-white hover:text-black font-bold text-sm rounded-lg transition-colors flex justify-center items-center gap-2">
-                Buy Proxy <i class="ph-bold ph-arrow-square-out"></i>
-            </a>
-        </div>
-
-        <div class="neon-panel glow-amber p-6 md:p-8 flex flex-col items-center text-center justify-between border-t-2 border-t-amber-500 bg-gradient-to-b from-[#12121a] to-[#09090b]">
-            <div class="w-full">
-                <div class="w-16 h-16 bg-amber-500/10 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-5 border border-amber-500/20">
-                    <i class="ph-bold ph-wifi-high text-3xl drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-3">IProcket Premium</h3>
-                <div class="bg-zinc-800/50 p-3 rounded-lg border border-zinc-700/50 w-full mb-6">
-                    <p class="text-xs text-zinc-300 font-bold mb-1">10 Gb - $32+ VAT - 60 Day</p>
-                    <p class="text-amber-400 font-black text-lg">3200 Tk</p>
-                </div>
-            </div>
-            <a href="https://iprocket.io/prices/premium-residential-proxies-pricing" target="_blank" class="w-full py-3 bg-zinc-800 hover:bg-amber-500 text-white hover:text-black font-bold text-sm rounded-lg transition-colors flex justify-center items-center gap-2">
-                Buy Proxy <i class="ph-bold ph-arrow-square-out"></i>
-            </a>
-        </div>
-
-        <div class="neon-panel glow-amber p-6 md:p-8 flex flex-col items-center text-center justify-between border-t-2 border-t-amber-500 bg-gradient-to-b from-[#12121a] to-[#09090b]">
-            <div class="w-full">
-                <div class="w-16 h-16 bg-amber-500/10 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-5 border border-amber-500/20">
-                    <i class="ph-bold ph-wifi-high text-3xl drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-3">Proxy-Seller</h3>
-                <div class="bg-zinc-800/50 p-3 rounded-lg border border-zinc-700/50 w-full mb-6">
-                    <p class="text-xs text-zinc-300 font-bold mb-1">10 Gb - $25+ VAT - 30 Day</p>
-                    <p class="text-amber-400 font-black text-lg">3400 Tk</p>
-                </div>
-            </div>
-            <a href="https://proxy-seller.com/" target="_blank" class="w-full py-3 bg-zinc-800 hover:bg-amber-500 text-white hover:text-black font-bold text-sm rounded-lg transition-colors flex justify-center items-center gap-2">
-                Buy Proxy <i class="ph-bold ph-arrow-square-out"></i>
-            </a>
-        </div>
-
-        <div class="neon-panel glow-amber p-6 md:p-8 flex flex-col items-center text-center justify-between border-t-2 border-t-amber-500 bg-gradient-to-b from-[#12121a] to-[#09090b]">
-            <div class="w-full">
-                <div class="w-16 h-16 bg-amber-500/10 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-5 border border-amber-500/20">
-                    <i class="ph-bold ph-wifi-high text-3xl drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-3">Nodemaven</h3>
-                <div class="bg-zinc-800/50 p-3 rounded-lg border border-zinc-700/50 w-full mb-6">
-                    <p class="text-xs text-zinc-300 font-bold mb-1">2 GB - $8.50+ VAT - 30 Day</p>
-                    <p class="text-amber-400 font-black text-lg">1180 Tk</p>
-                </div>
-            </div>
-            <a href="https://go.nodemaven.com/freelancernazmulcourse" target="_blank" class="w-full py-3 bg-zinc-800 hover:bg-amber-500 text-white hover:text-black font-bold text-sm rounded-lg transition-colors flex justify-center items-center gap-2">
-                Buy Proxy <i class="ph-bold ph-arrow-square-out"></i>
-            </a>
-        </div>
-
-        <div class="neon-panel glow-amber p-6 md:p-8 flex flex-col items-center text-center justify-between border-t-2 border-t-amber-500 bg-gradient-to-b from-[#12121a] to-[#09090b]">
-            <div class="w-full">
-                <div class="w-16 h-16 bg-amber-500/10 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-5 border border-amber-500/20">
-                    <i class="ph-bold ph-wifi-high text-3xl drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-3">Cliproxy ISP</h3>
-                <div class="bg-zinc-800/50 p-3 rounded-lg border border-zinc-700/50 w-full mb-6">
-                    <p class="text-xs text-zinc-300 font-bold mb-1">200 IPs - $35+ VAT - 30 Day</p>
-                    <p class="text-amber-400 font-black text-lg">2100 Tk</p>
-                </div>
-            </div>
-            <a href="https://cliproxy.com/pricing/isp-socks5/" target="_blank" class="w-full py-3 bg-zinc-800 hover:bg-amber-500 text-white hover:text-black font-bold text-sm rounded-lg transition-colors flex justify-center items-center gap-2">
-                Buy Proxy <i class="ph-bold ph-arrow-square-out"></i>
-            </a>
-        </div>
-
-    </div>
-</div>
-
-<script>
-    document.addEventListener('contextmenu', event => event.preventDefault());
-    document.onkeydown = function(e) {
-        if (e.keyCode == 123) return false;
-        if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 67 || e.keyCode == 74)) return false;
-        if (e.ctrlKey && (e.keyCode == 85 || e.keyCode == 83)) return false;
-    };
-</script>
+        // Security
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123) return false;
+            if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 67 || e.keyCode == 74)) return false;
+            if (e.ctrlKey && (e.keyCode == 85 || e.keyCode == 83)) return false;
+        };
+    </script>
+</body>
+</html>
